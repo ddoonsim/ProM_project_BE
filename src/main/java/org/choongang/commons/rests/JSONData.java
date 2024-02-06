@@ -1,8 +1,6 @@
 package org.choongang.commons.rests;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.http.HttpStatus;
 
 /**
@@ -10,10 +8,11 @@ import org.springframework.http.HttpStatus;
  */
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class JSONData<T> {
     private HttpStatus status = HttpStatus.OK ;    // 상태 코드
     private boolean success = true ;    // 성공 여부
+    @NonNull
     private T data ;    // 성공 시에 서버에 전달될 데이터
     private String message ;    // 에러 메세지
 }

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<head>
+    <meta charset="UTF-8">
+    <title th:if="${pageTitle != null}" th:text="${pageTitle}"></title>
+
+    <!--모든 페이지에 적용되는 공통 스타일시트-->
+    <link rel="stylesheet" type="text/css" th:href="@{/common/css/style.css}">
+    <!--페이지마다 적용되는 css가 다른 경우에 css파일을 컨트롤러에서 전달 받아서 반복문으로 대입-->
+    <link rel="stylesheet" type="text/css"
+          th:each="cssFile : ${addCommonCss}"
+          th:href="@{/common/css/{file}.css(file=${addCommonCss})}">
+
+    <!--PC 모드에만 적용되는 스타일시트-->
+    <link rel="stylesheet" type="text/css" th:href="@{/front/css/style.css}">
+    <!--PC 모드의 페이지마다 적용되는 css가 다른 경우에 css파일을 컨트롤러에서 전달 받아서 반복문으로 대입-->
+    <link rel="stylesheet" type="text/css"
+          th:each="cssFile : ${addCss}"
+          th:href="@{/front/css/{file}.css(file=${cssFile})}">
+
+    <!--컨트롤러를 거치지 않는 경우에도 CSS가 적용될 수 있게 내용 치환으로 외부 CSS 적용-->
+    <th:block layout:fragment="addCss"></th:block>
+
+    <!--모든 페이지에 적용되는 공통 js-->
+    <script th:src="@{/common/js/common.js}"></script>
+    <!--페이지마다 적용되는 js파일을 컨트롤러에서 전달 받아서 반복문으로 대입-->
+    <script th:each="jsFile : ${addCommonScript}"
+            th:src="@{/common/js/{file}.js(file=${jsFile})}"></script>
+
+    <!--PC 모드에만 적용되는 js-->
+    <script th:src="@{/front/js/common.js}"></script>
+    <!--PC 모드의 페이지마다 적용되는 js파일을 컨트롤러에서 전달 받아서 반복문으로 대입-->
+    <script th:each="jsFile : ${addScript}" th:src="@{/front/js/{file}.js(file=${jsFile})}"></script>
+
+    <!--컨트롤러를 거치지 않는 경우에도 스크립트가 적용될 수 있게 내용 치환\-->
+    <th:block layout:fragment="addScript"></th:block>
+</head>
+
+<body>
+    <header th:replace="~{front/outlines/header::common}"></header>  <!--헤더-->
+    <main layout:fragment="content">
+        <h1>본문</h1>
+    </main>
+    <footer th:replace="~{front/outlines/footer::common}"></footer>  <!--풋터-->
+</body>
+</html>

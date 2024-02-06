@@ -1,0 +1,80 @@
+## 팀 공유 용
+
+server:
+  port: 3000
+
+spring:
+  profiles:
+    active: dev
+
+  # 파일 업로드 용량 설정
+  servlet:
+    multipart:
+      maxFileSize: 20MB
+      maxRequestSize: 60MB
+
+  # 데이터베이스 설정
+  datasource:
+    driverClassName: oracle.jdbc.driver.OracleDriver
+    url: jdbc:oracle:thin:@localhost:1521:orcl
+    username: PROJECT
+    password: _aA123456
+
+  # JPA 설정
+  jpa:
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+        use_sql_comments: true
+        default_batch_fetch_size: 1000
+    hibernate:
+      ddlAuto: create
+
+  # 타임리프 설정
+  thymeleaf:
+    cache: false
+    prefix: file:src/main/resources/templates/
+
+  # 라이브 리로드 설정
+  devtools:
+    livereload:
+      enabled: true
+
+      jackson:
+        serialization:
+          failOnEmptyBeans: false
+
+  # 정적 자원 설정(CSS, JS, 이미지)
+  web:
+    resources:
+      staticLocations: file:src/main/resources/static/
+
+  # 이메일 전송을 위한 설정
+  mail:
+    host: smtp.gmail.com # SMTP 서버 호스트
+    port: 587 # SMTP 서버 포트
+    username: ${mail.username} # 이메일 아이디, 주소가 test@gmail.com이면 test
+    password: ${mail.password} # 앱 비밀번호
+    properties:
+      mail:
+        smtp:
+          auth: true # 사용자 인증 시도 여부 - 기본값 false
+          timeout: 5000 # Socket Read Timeout 시간(ms) - 기본값 : 무한대
+          starttls:
+            enable: true # StartTLS 활성화 여부 - 기본값 false
+
+# 로거 설정
+logging:
+  level:
+    org:
+      hibernate:
+        type:
+          descriptor:
+            sql: trace
+
+# 파일 업로드 경로 설정
+file:
+  upload:
+    path: C:/uploads/
+    url: /uploads/

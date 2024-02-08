@@ -21,6 +21,7 @@ public record RequestJoin(
         @NotBlank
         String name,
 
+        @NotBlank
         String mobile,
 
         @AssertTrue

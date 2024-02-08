@@ -1,4 +1,4 @@
-package org.choongang.member.models;
+package org.choongang.member.service;
 
 import lombok.Builder;
 import lombok.Data;

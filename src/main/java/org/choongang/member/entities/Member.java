@@ -15,9 +15,6 @@ public class Member extends Base {
     @Id @GeneratedValue
     private Long seq;
 
-    @Column(length=40, unique = true, nullable = false)
-    private String memberId;
-
     @Column(length=40, nullable = false)
     private String name;
 

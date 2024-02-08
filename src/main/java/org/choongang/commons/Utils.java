@@ -8,6 +8,7 @@ import org.choongang.file.entities.FileInfo;
 import org.choongang.file.service.FileInfoService;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
+import org.springframework.validation.Errors;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -81,8 +82,17 @@ public class Utils {
         }
     }
 
+    // 타입을 지정하지 않은 경우 ==> validations가 default로 설정되어 있음
     public static String getMessage(String code) {
         return getMessage(code, null);
+    }
+
+    public static List<String> getMessages(Errors errors) {
+        return errors.getFieldErrors()
+                .stream()
+                .flatMap(f -> Arrays.stream(f.getCodes()).sorted(Comparator.reverseOrder())
+                        .map(c -> getMessage(c)))
+                .filter(s -> s != null && !s.isBlank()).toList();
     }
 
     /**

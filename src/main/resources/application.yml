@@ -73,6 +73,12 @@ logging:
           descriptor:
             sql: trace
 
+# JSON WebToken 설정
+jwt:
+  header: Authorization
+  secret: YXNkZmFzZGZhc2RmZHNmc2RhMTIzMTIzMTIxMjMxMjMxMjMyMzEyMzEyMzEyMTMyMTIzMTIzMTIzMTIzMTIzMTMyMjMxMjMxMjM
+  accessTokenValidityInSeconds: 3600 # 60 min
+
 # 파일 업로드 경로 설정
 file:
   upload:

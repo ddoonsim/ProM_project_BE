@@ -1,7 +1,7 @@
 ## 배포 용
 
 server:
-  port: 3000
+  port: 2000
 
 spring:
   # 파일 업로드 용량 설정
@@ -13,9 +13,9 @@ spring:
   # 데이터베이스 설정
   datasource:
     driverClassName: oracle.jdbc.driver.OracleDriver
-    url: jdbc:oracle:thin:@localhost:1521:xe
-    username: PROJECT
-    password: _aA123456
+    url: jdbc:oracle:thin:@${db.host}:1521:xe
+    username: ${db.username}
+    password: ${db.password}
 
   # JPA 설정
   jpa:

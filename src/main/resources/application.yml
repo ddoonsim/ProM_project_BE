@@ -1,7 +1,7 @@
 ## 팀 공유 용
 
 server:
-  port: 3000
+  port: 2000
 
 spring:
   profiles:

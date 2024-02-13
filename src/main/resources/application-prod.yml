@@ -1,7 +1,7 @@
 ## 배포 용
 
 server:
-  port: 3000
+  port: 2000
 
 spring:
   # 파일 업로드 용량 설정

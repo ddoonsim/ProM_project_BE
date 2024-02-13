@@ -2,6 +2,7 @@ package org.choongang.member.service;
 
 import lombok.RequiredArgsConstructor;
 import org.choongang.configs.jwt.TokenProvider;
+import org.choongang.member.controller.RequestLogin;
 import org.choongang.member.controller.ResponseLogin;
 import org.choongang.member.repositories.MemberRepository;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -27,5 +28,15 @@ public class MemberLoginService {
         return ResponseLogin.builder()
                 .accessToken(accessToken)
                 .build();
+    }
+
+    public String login(RequestLogin form) {
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(form.email(), form.password());
+
+        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+
+        String accessToken = tokenProvider.createToken(authentication); // JWT 토큰 발급
+
+        return accessToken;
     }
 }

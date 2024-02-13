@@ -7,6 +7,8 @@ import org.choongang.commons.Utils;
 import org.choongang.commons.exceptions.BadRequestException;
 import org.choongang.commons.rests.JSONData;
 import org.choongang.configs.jwt.CustomJwtFilter;
+import org.choongang.member.entities.Member;
+import org.choongang.member.service.MemberInfo;
 import org.choongang.member.service.MemberInfoService;
 import org.choongang.member.service.MemberJoinService;
 import org.choongang.member.service.MemberLoginService;
@@ -14,6 +16,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,20 +38,21 @@ public class MemberController {
      *
      */
     @PostMapping("/token")
-    public ResponseEntity<JSONData<ResponseLogin>> authorize(@Valid @RequestBody RequestLogin requestLogin, Errors errors) {
-        // 유효성 검사 처리
+    public ResponseEntity<JSONData> token(@RequestBody @Valid RequestLogin form, Errors errors) {
         errorProcess(errors);
 
-        ResponseLogin token = loginService.authenticate(requestLogin.email(), requestLogin.password());
+        String accessToken = loginService.login(form);
 
+        /**
+         * 1. 응답 body - JSONData 형식으로
+         * 2. 응답 헤더 - Authorization: Bearer 토큰
+         */
+
+        JSONData data = new JSONData(accessToken);
         HttpHeaders headers = new HttpHeaders();
-        headers.add(CustomJwtFilter.AUTHORIZATION_HEADER, "Bearer " + token.accessToken());
+        headers.add("Authorization", "Bearer " + accessToken);
 
-        JSONData<ResponseLogin> data = new JSONData<>(token);
-
-        return ResponseEntity.status(data.getStatus())
-                .headers(headers)
-                .body(data);
+        return ResponseEntity.status(data.getStatus()).headers(headers).body(data);
     }
 
     /**
@@ -74,6 +78,13 @@ public class MemberController {
             List<String> errorMessages = Utils.getMessages(errors);
             throw new BadRequestException(errorMessages.stream().collect(Collectors.joining("||")));
         }
+    }
+
+    @GetMapping("/info")
+    public JSONData info(@AuthenticationPrincipal MemberInfo memberInfo) {
+        Member member = memberInfo.getMember();
+
+        return new JSONData(member);
     }
 
 

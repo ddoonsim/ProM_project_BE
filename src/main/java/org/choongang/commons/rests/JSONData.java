@@ -16,3 +16,4 @@ public class JSONData<T> {
     private T data ;    // 성공 시에 서버에 전달될 데이터
     private String message ;    // 에러 메세지
 }
+

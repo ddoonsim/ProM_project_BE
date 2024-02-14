@@ -24,7 +24,7 @@ public class Member extends Base {
     @Column(length=65, nullable = false)
     private String password;
 
-    @Column(length=11)
+    @Column(length=15)
     private String mobile;
 
     @Enumerated(EnumType.STRING)

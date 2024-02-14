@@ -24,13 +24,15 @@ public class MemberSaveService {
             return;
         }
 
+        String mobile = form.mobile();
+        mobile = mobile.replaceAll("\\D", "").substring(0, 11);
         // 회원 가입 처리
         String hash = passwordEncoder.encode(form.password());
         Member member = Member.builder()
                 .email(form.email())
                 .name(form.name())
                 .password(hash)
-                .mobile(form.mobile())
+                .mobile(mobile)
                 .type(MemberType.USER)
                 .build();
 

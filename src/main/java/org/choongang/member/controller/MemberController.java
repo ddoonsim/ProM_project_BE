@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.choongang.commons.Utils;
 import org.choongang.commons.exceptions.BadRequestException;
 import org.choongang.commons.rests.JSONData;
-import org.choongang.configs.jwt.CustomJwtFilter;
 import org.choongang.member.entities.Member;
 import org.choongang.member.service.MemberInfo;
 import org.choongang.member.service.MemberInfoService;

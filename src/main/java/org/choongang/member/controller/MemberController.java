@@ -7,8 +7,8 @@ import org.choongang.commons.Utils;
 import org.choongang.commons.exceptions.BadRequestException;
 import org.choongang.commons.rests.JSONData;
 import org.choongang.member.entities.Member;
+import org.choongang.member.repositories.MemberRepository;
 import org.choongang.member.service.MemberInfo;
-import org.choongang.member.service.MemberInfoService;
 import org.choongang.member.service.MemberJoinService;
 import org.choongang.member.service.MemberLoginService;
 import org.springframework.http.HttpHeaders;
@@ -30,7 +30,7 @@ public class MemberController {
 
     private final MemberJoinService joinService ;
     private final MemberLoginService loginService ;
-    private final MemberInfoService infoService ;
+    private final MemberRepository memberRepository;
 
     /**
      * accessToken 발급
@@ -68,6 +68,26 @@ public class MemberController {
         JSONData<Object> data = new JSONData<>();
         data.setSuccess(true);
         data.setStatus(status);
+
+        return ResponseEntity.status(status).body(data);
+    }
+
+    /**
+     * 이메일 중복 여부 체크
+     */
+    @GetMapping("/email_dup_check")
+    public ResponseEntity<JSONData<Object>> duplicateEmailCheck(@RequestParam("email") String email) {
+        boolean isExists = memberRepository.exists(email);
+        HttpStatus status = HttpStatus.OK;
+        JSONData<Object> data = new JSONData<>();
+        data.setSuccess(false);
+
+        if (isExists) {
+            data.setSuccess(isExists);
+            data.setStatus(status);
+
+            return ResponseEntity.status(status).body(data);
+        }
 
         return ResponseEntity.status(status).body(data);
     }

@@ -39,12 +39,13 @@ public class ApiEmailController {
      * 발급받은 인증코드와 사용자 입력 코드의 일치 여부 체크
      */
     @GetMapping("/auth_check")
-    public JSONData<Object> checkVerifiedEmail(@RequestParam("authNum") int authNum) {
+    public ResponseEntity<JSONData<Object>> checkVerifiedEmail(@RequestParam("authNum") int authNum) {
         JSONData<Object> data = new JSONData<>();
+        HttpStatus status = HttpStatus.OK;
 
         boolean result = verifyService.check(authNum);
         data.setSuccess(result);
 
-        return data;
+        return ResponseEntity.status(status).body(data);
     }
 }

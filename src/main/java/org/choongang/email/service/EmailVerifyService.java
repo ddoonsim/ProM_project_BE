@@ -16,9 +16,6 @@ public class EmailVerifyService {
 
     /**
      * 이메일 인증 번호 발급 전송
-     *
-     * @param email
-     * @return
      */
     public boolean sendCode(String email) {
         int authNum = (int)(Math.random() * 99999);
@@ -38,9 +35,6 @@ public class EmailVerifyService {
 
     /**
      * 발급 받은 인증번호와 사용자 입력 코드와 일치 여부 체크
-     *
-     * @param code
-     * @return
      */
     public boolean check(int code) {
 

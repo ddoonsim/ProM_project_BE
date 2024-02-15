@@ -49,6 +49,7 @@ public class SecurityConfig {
                     c.requestMatchers("/api/v1/member",
                                     "/api/v1/member/token",
                                     "/api/v1/member/login",
+                                    "/api/v1/email/**",
                                     "/api/v1/member/exists/**").permitAll()
                             .anyRequest().authenticated();
                 });

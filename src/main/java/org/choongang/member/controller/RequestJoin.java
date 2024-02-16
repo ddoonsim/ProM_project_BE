@@ -9,6 +9,8 @@ import lombok.Builder;
 @Builder
 public record RequestJoin(
 
+        String gid,
+
         @NotBlank @Email
         String email,
 

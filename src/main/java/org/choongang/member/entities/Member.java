@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.choongang.commons.constants.MemberType;
 import org.choongang.commons.entities.Base;
+import org.choongang.file.entities.FileInfo;
 
 @Entity
 @Data @Builder
@@ -14,6 +15,9 @@ import org.choongang.commons.entities.Base;
 public class Member extends Base {
     @Id @GeneratedValue
     private Long seq;
+
+    @Column(length=65, nullable = false)
+    private String gid;
 
     @Column(length=40, nullable = false)
     private String name;
@@ -26,6 +30,9 @@ public class Member extends Base {
 
     @Column(length=15)
     private String mobile;
+
+    @Transient
+    private FileInfo profileImage;
 
     @Enumerated(EnumType.STRING)
     @Column(length=30, nullable = false)

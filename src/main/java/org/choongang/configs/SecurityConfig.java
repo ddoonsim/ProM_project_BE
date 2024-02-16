@@ -3,12 +3,12 @@ package org.choongang.configs;
 import org.choongang.configs.jwt.CustomJwtFilter;
 import org.choongang.configs.jwt.JwtAccessDeniedHandler;
 import org.choongang.configs.jwt.JwtAuthenticationEntryPoint;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -41,7 +41,7 @@ public class SecurityConfig {
         http.csrf(c -> c.disable())
                 .addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(customJwtFilter, UsernamePasswordAuthenticationFilter.class)
-                .sessionManagement(c -> c.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .sessionManagement(c -> c.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
                 .exceptionHandling(c -> {
                     c.authenticationEntryPoint(jwtAuthenticationEntryPoint).accessDeniedHandler(jwtAccessDeniedHandler);
                 })
@@ -49,8 +49,10 @@ public class SecurityConfig {
                     c.requestMatchers("/api/v1/member",
                                     "/api/v1/member/token",
                                     "/api/v1/member/login",
+                                    "/api/v1/member/info",
                                     "/api/v1/member/email_dup_check",
                                     "/api/v1/email/**",
+                                    "/api/v1/email/auth_check",
                                     "/api/v1/member/exists/**").permitAll()
                             .anyRequest().authenticated();
                 });

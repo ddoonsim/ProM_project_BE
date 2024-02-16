@@ -2,6 +2,7 @@ package org.choongang.member.service;
 
 import lombok.RequiredArgsConstructor;
 import org.choongang.commons.constants.MemberType;
+import org.choongang.file.service.FileUploadService;
 import org.choongang.member.controller.JoinValidator;
 import org.choongang.member.controller.RequestJoin;
 import org.choongang.member.entities.Member;
@@ -10,13 +11,16 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.Errors;
 
+import java.util.UUID;
+
 
 @Service
 @RequiredArgsConstructor
 public class MemberJoinService {
     private final MemberRepository repository;
     private final PasswordEncoder passwordEncoder;
-    private final JoinValidator validator ;    // 회원가입 유효성 검사
+    private final JoinValidator validator;    // 회원가입 유효성 검사
+    private final FileUploadService uploadService;
 
     public void save(RequestJoin form, Errors errors) {
         validator.validate(form, errors);  // 유효성 검사 실행
@@ -30,6 +34,7 @@ public class MemberJoinService {
     public void save(RequestJoin form) {
         String password = passwordEncoder.encode(form.password());
         Member member = Member.builder()
+                .gid(UUID.randomUUID().toString())
                 .name(form.name())
                 .email(form.email())
                 .password(password)
@@ -37,6 +42,8 @@ public class MemberJoinService {
                 .type(MemberType.USER)
                 .build();
         save(member);
+
+        uploadService.processDone(member.getGid());
     }
 
     public void save(Member member) {

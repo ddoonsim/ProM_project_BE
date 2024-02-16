@@ -1,5 +1,6 @@
 package org.choongang.member.controller;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.choongang.commons.validators.MobileValidator;
 import org.choongang.commons.validators.PasswordValidator;
@@ -16,6 +17,7 @@ import org.springframework.validation.Validator;
 public class JoinValidator implements Validator, PasswordValidator, MobileValidator {
 
     private final MemberRepository repository;
+    private final HttpSession session ;
 
     @Override
     public boolean supports(Class<?> clazz) {
@@ -56,6 +58,16 @@ public class JoinValidator implements Validator, PasswordValidator, MobileValida
         // 4. 휴대전화번호 형식 체크
         if (mobile != null && !mobile.isBlank() && !mobileNumCheck(mobile)) {
             errors.rejectValue("mobile", "Mobile");
+        }
+
+        // 5. 이메일 인증 필수 여부 체크
+        boolean isVerified = (boolean)session.getAttribute("EmailAuthVerified");
+        /*개발 끝나고 지우기*/
+        isVerified = true;
+        /*개발 끝나고 지우기*/
+        if (!isVerified) {
+            // 이메일 인증이 안된 경우
+            errors.rejectValue("email", "Required.verified");
         }
     }
 }

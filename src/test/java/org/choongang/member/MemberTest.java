@@ -20,6 +20,7 @@ public class MemberTest {
     public void insertData() {
         RequestJoin form =
                 new RequestJoin(
+                        "gidTest",
                         "user01@test.org",
                         "12345678",
                         "12345678",

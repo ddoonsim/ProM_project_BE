@@ -1,8 +1,8 @@
 package org.choongang.project.service;
 
 import lombok.RequiredArgsConstructor;
+import org.choongang.member.MemberUtil;
 import org.choongang.member.entities.Member;
-import org.choongang.member.service.MemberInfo;
 import org.choongang.project.controllers.ProjectValidator;
 import org.choongang.project.controllers.RequestProjectForm;
 import org.choongang.project.entities.Project;
@@ -22,7 +22,7 @@ public class SaveProjectService {
 
     private final ProjectValidator validator;
     private final ProjectRepository projectRepository;
-    private final MemberInfo memberInfo;
+    private final MemberUtil memberUtil;
 
     /**
      * 새 프로젝트 생성 & 저장 메서드
@@ -35,7 +35,7 @@ public class SaveProjectService {
         }
 
         List<Member> members = new ArrayList<>();
-        Member member = memberInfo.getMember();  // 현재 로그인 중인 회원 정보 가져오기
+        Member member = memberUtil.getMember();  // 현재 로그인 중인 회원 정보 가져오기
         members.add(member);
 
         save(form, members);  // 저장
@@ -44,7 +44,7 @@ public class SaveProjectService {
 
     /**
      * DB에 저장하는 메서드
-      */
+     */
     public void save(RequestProjectForm form, List<Member> members) {
         // DB에 저장
         Project project = Project.builder()

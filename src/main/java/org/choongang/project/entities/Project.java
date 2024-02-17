@@ -19,7 +19,7 @@ public class Project extends BaseMember {
     @Id @GeneratedValue
     private Long seq;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "member_project")
     private List<Member> member = new ArrayList<>();    // 참여자
 

@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.choongang.commons.entities.BaseMember;
 import org.choongang.member.entities.Member;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -18,9 +19,9 @@ public class Project extends BaseMember {
     @Id @GeneratedValue
     private Long seq;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="manager")
-    private List<Member> member;    // 참여자
+    @ManyToMany
+    @JoinTable(name = "member_project")
+    private List<Member> member = new ArrayList<>();    // 참여자
 
     @Column(length = 80, nullable = false)
     private String pName;    // 프로젝트 명

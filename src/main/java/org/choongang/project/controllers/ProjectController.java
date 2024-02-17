@@ -9,10 +9,7 @@ import org.choongang.project.service.SaveProjectService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,7 +24,7 @@ public class ProjectController {
     /**
      * 새 프로젝트 생성
      */
-    @GetMapping("/new")
+    @PostMapping("/new")
     public ResponseEntity<JSONData<Object>> newProject(@RequestBody @Valid RequestProjectForm form, Errors errors) {
 
         saveService.newProject(form, errors);

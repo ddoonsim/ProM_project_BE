@@ -38,4 +38,8 @@ public class Member extends Base {
     @Column(length=30, nullable = false)
     private MemberType type = MemberType.USER;
 
+//    @ManyToMany
+//    @JoinTable(name = "member_project")
+//    private List<Project> project = new ArrayList<>();    // 참여 중인 프로젝트
+
 }

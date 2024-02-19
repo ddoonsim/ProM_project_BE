@@ -5,6 +5,9 @@ import lombok.RequiredArgsConstructor;
 import org.choongang.commons.Utils;
 import org.choongang.commons.exceptions.BadRequestException;
 import org.choongang.commons.rests.JSONData;
+import org.choongang.member.MemberUtil;
+import org.choongang.project.entities.Project;
+import org.choongang.project.service.ProjectInfoService;
 import org.choongang.project.service.SaveProjectService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +23,8 @@ import java.util.stream.Collectors;
 public class ProjectController {
 
     private final SaveProjectService saveService;
+    private final ProjectInfoService infoService;
+    private final MemberUtil memberUtil;
 
     /**
      * 새 프로젝트 생성
@@ -43,6 +48,23 @@ public class ProjectController {
             List<String> errorMessages = Utils.getMessages(errors);
             throw new BadRequestException(errorMessages.stream().collect(Collectors.joining("||")));
         }
+    }
+
+    /**
+     * 현재 로그인 중인 회원이 참여 중인 프로젝트 목록 반환
+     */
+    @GetMapping("/list")
+    public ResponseEntity<JSONData<Object>> list() {
+        Long memberSeq = memberUtil.getMember().getSeq();
+        List<Project> projects =  infoService.getProjects(memberSeq);
+
+        HttpStatus status = HttpStatus.OK;
+        JSONData<Object> data = new JSONData<>();
+        data.setSuccess(true);
+        data.setStatus(status);
+        data.setData(projects);
+
+        return ResponseEntity.status(status).body(data);
     }
 
     /**

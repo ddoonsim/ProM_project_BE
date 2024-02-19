@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.choongang.commons.Utils;
 import org.choongang.commons.exceptions.BadRequestException;
 import org.choongang.commons.rests.JSONData;
+import org.choongang.member.MemberUtil;
 import org.choongang.member.entities.Member;
 import org.choongang.member.repositories.MemberRepository;
 import org.choongang.member.service.MemberInfo;
@@ -31,6 +32,7 @@ public class MemberController {
     private final MemberJoinService joinService ;
     private final MemberLoginService loginService ;
     private final MemberRepository memberRepository;
+    private final MemberUtil memberUtil;
 
     /**
      * accessToken 발급

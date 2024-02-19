@@ -33,4 +33,13 @@ public class Project extends BaseMember {
 
     private boolean isValidUserOnly;    // 회원 전용 서비스
 
+    @Override
+    public String toString() {
+        return "Project{" +
+                "seq=" + seq +
+                ", pName='" + pName + '\'' +
+                ", description='" + description + '\'' +
+                ", isValidUserOnly=" + isValidUserOnly +
+                '}';
+    }
 }

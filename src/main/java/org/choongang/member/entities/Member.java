@@ -48,4 +48,17 @@ public class Member extends Base {
     @JoinTable(name = "member_project")
     private List<Project> project = new ArrayList<>();    // 참여 중인 프로젝트
 
+    @Override
+    public String toString() {
+        return "Member{" +
+                "seq=" + seq +
+                ", gid='" + gid + '\'' +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", mobile='" + mobile + '\'' +
+                ", profileImage=" + profileImage +
+                ", type=" + type +
+                '}';
+    }
 }

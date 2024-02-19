@@ -1,8 +1,7 @@
 package org.choongang.configs;
 
+import jakarta.servlet.http.HttpServletResponse;
 import org.choongang.configs.jwt.CustomJwtFilter;
-import org.choongang.configs.jwt.JwtAccessDeniedHandler;
-import org.choongang.configs.jwt.JwtAuthenticationEntryPoint;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,23 +29,25 @@ public class SecurityConfig {
     @Autowired
     private CustomJwtFilter customJwtFilter;
 
-    @Autowired
-    private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
-
-    @Autowired
-    private JwtAccessDeniedHandler jwtAccessDeniedHandler;
-
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf(c -> c.disable())
                 .addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(customJwtFilter, UsernamePasswordAuthenticationFilter.class)
-                .sessionManagement(c -> c.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
-                .exceptionHandling(c -> {
-                    c.authenticationEntryPoint(jwtAuthenticationEntryPoint).accessDeniedHandler(jwtAccessDeniedHandler);
-                })
-                .authorizeHttpRequests(c -> {
-                    c.requestMatchers("/api/v1/member",
+                .sessionManagement(c -> c.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+
+        http.exceptionHandling(c -> {
+            c.authenticationEntryPoint((req,  res,  e) -> {
+                res.sendError(HttpServletResponse.SC_UNAUTHORIZED); //  401
+            });
+
+            c.accessDeniedHandler((req,res, e) -> {
+                res.sendError(HttpServletResponse.SC_FORBIDDEN); // 403
+            });
+        });
+
+        http.authorizeHttpRequests(c -> {
+            c.requestMatchers("/api/v1/member",
                                     "/api/v1/member/token",
                                     "/api/v1/member/login",
                                     "/api/v1/member/info",
@@ -54,8 +55,8 @@ public class SecurityConfig {
                                     "/api/v1/email/**",
                                     "/api/v1/email/auth_check",
                                     "/api/v1/member/exists/**").permitAll()
-                            .anyRequest().authenticated();
-                });
+                                    .anyRequest().authenticated();
+        });
 
         return http.build();
     }

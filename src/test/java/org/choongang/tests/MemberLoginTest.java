@@ -5,7 +5,7 @@ import org.choongang.commons.constants.MemberType;
 import org.choongang.commons.rests.JSONData;
 import org.choongang.member.controller.RequestLogin;
 import org.choongang.member.entities.Member;
-import org.choongang.member.service.MemberSaveService;
+import org.choongang.member.service.MemberJoinService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -35,7 +35,7 @@ public class MemberLoginTest {
     private MockMvc mockMvc;
 
     @Autowired
-    private MemberSaveService memberSaveService;
+    private MemberJoinService memberJoinService;
 
     @Autowired
     private PasswordEncoder encoder;
@@ -51,7 +51,7 @@ public class MemberLoginTest {
                 .mobile("01000000000")
                 .type(MemberType.USER)
                 .build();
-        memberSaveService.save(member);
+        memberJoinService.save(member);
     }
 
     @Test

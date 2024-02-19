@@ -1,39 +1,49 @@
 package org.choongang.commons.validators;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public interface PasswordValidator {
-
     /**
-     * 비밀번호에 알파벳 포함 여부
-     * @param caseIncensitive
-     *          false : 대문자 1개 이상, 소문자 1개 이상 포함
-     *          true : 대소문자 구분없이 1개 이상 포함
+     * 비밀번호 복잡성 체크 - 알파벳 체크
+     *
+     * @param password
+     * @param caseIncentive
+     *          false : 소문자 + 대문자가 반드시 포함되는 패턴
+     *          true : 대소문자 상관없이 포함되는 패턴
+     * @return
      */
-    default boolean alphaCheck(String password, boolean caseIncensitive) {
-        if (caseIncensitive) { // 대소문자 구분 없이 체크
-            String pattern = ".*[a-zA-Z]+.*";
-
-            return password.matches(pattern);
-        } else { // 대문자 1개, 소문자 1개 포함
-            String pattern1 = ".*[a-z]+.*";
-            String pattern2 = ".*[A-Z]+.*";
-
-            return password.matches(pattern1) && password.matches(pattern2);
+    default boolean alphaCheck(String password, boolean caseIncentive) {
+        if (caseIncentive) { // 대소문자 구분없이 체크
+            Pattern pattern = Pattern.compile("[a-z]+", Pattern.CASE_INSENSITIVE);
+            return pattern.matcher(password).find();
         }
-    }
 
+        // 대문자, 소문자 각각 체크
+        Pattern pattern1 = Pattern.compile("[a-z]+");
+        Pattern pattern2 = Pattern.compile("[A-Z]+");
+        return pattern1.matcher(password).find() && pattern2.matcher(password).find();
+    }
     /**
-     * 비밀번호에 숫자 포함 여부
+     * 숫자가 포함된 패턴인지 체크
+     *
+     * @param password
+     * @return
      */
     default boolean numberCheck(String password) {
-        return password.matches(".*\\d+.*");
+        Pattern pattern = Pattern.compile("\\d+");
+        Matcher matcher = pattern.matcher(password);
+        return matcher.find();
     }
 
     /**
-     * 비밀번호에 특수문자 포함 여부
+     * 특수문자가 포함된 패턴인지 체크
+     * @param password
+     * @return
      */
     default boolean specialCharsCheck(String password) {
-        String pattern = ".*[`~!@#$%^*&()-_+=]+.*";
-
-        return password.matches(pattern);
+        Pattern pattern = Pattern.compile("[`~!#$%\\^&\\*()-_+=]+");
+        Matcher matcher = pattern.matcher(password);
+        return matcher.find();
     }
 }

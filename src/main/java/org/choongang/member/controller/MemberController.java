@@ -58,7 +58,7 @@ public class MemberController {
      * 회원가입 처리
      */
     @PostMapping
-    public ResponseEntity<JSONData<Object>> join(@RequestBody @Valid RequestJoin form, Errors errors) {
+    public ResponseEntity<JSONData> join(@RequestBody @Valid RequestJoin form, Errors errors) {
         joinService.save(form, errors);
 
         // 유효성 검사 처리
@@ -69,27 +69,27 @@ public class MemberController {
         data.setSuccess(true);
         data.setStatus(status);
 
-        return ResponseEntity.status(status).body(data);
+        return ResponseEntity.status(data.getStatus()).body(data);
     }
 
     /**
      * 이메일 중복 여부 체크
      */
     @GetMapping("/email_dup_check")
-    public ResponseEntity<JSONData<Object>> duplicateEmailCheck(@RequestParam("email") String email) {
+    public ResponseEntity<JSONData> duplicateEmailCheck(@RequestParam("email") String email) {
         boolean isExists = memberRepository.exists(email);
         HttpStatus status = HttpStatus.OK;
-        JSONData<Object> data = new JSONData<>();
+        JSONData data = new JSONData();
         data.setSuccess(false);
 
         if (isExists) {
             data.setSuccess(isExists);
             data.setStatus(status);
 
-            return ResponseEntity.status(status).body(data);
+            return ResponseEntity.status(data.getStatus()).body(data);
         }
 
-        return ResponseEntity.status(status).body(data);
+        return ResponseEntity.status(data.getStatus()).body(data);
     }
 
     private void errorProcess(Errors errors) {

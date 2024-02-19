@@ -30,8 +30,10 @@ public class CustomJwtFilter extends GenericFilterBean {
         String requestURI = req.getRequestURI();
 
         // 토큰 유효성 검사
-        if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) { // 토큰에 이상이 없는 경우
+        if (StringUtils.hasText(jwt)) { // 토큰에 이상이 없는 경우
+            tokenProvider.validateToken(jwt); // 토큰 이상시 -> 예외 발생
             // 토큰에서 사용자명, 권한을 추출하여 스프링 시큐리티 사용자를 만들어 Authentication 반환
+
             Authentication authentication = tokenProvider.getAuthentication(jwt);
             SecurityContextHolder.getContext().setAuthentication(authentication);
             log.debug("Security Context에 %s 인증 정보를 저장했습니다. URI : %s", authentication.getName(), requestURI);

@@ -47,6 +47,11 @@ public class MemberJoinService {
     }
 
     public void save(Member member) {
+        String mobile = member.getMobile();
+        if (member != null) {
+            mobile = mobile.replaceAll("\\D", "");
+            member.setMobile(mobile);
+        }
 
         repository.saveAndFlush(member);
     }

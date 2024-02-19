@@ -4,6 +4,8 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
+import org.choongang.commons.Utils;
+import org.choongang.commons.exceptions.BadRequestException;
 import org.choongang.member.service.MemberInfo;
 import org.choongang.member.service.MemberInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,18 +26,21 @@ public class TokenProvider {
     private final String secret;
     private final long tokenValidityInSeconds;
 
+    @Autowired
+    private MemberInfoService infoService;
+
     private Key key;
 
     @Autowired
     private MemberInfoService memberInfoService;
 
-    public TokenProvider(String secret, long tokenValidityInSeconds) {
+    public TokenProvider(String secret, Long tokenValidityInSeconds) {
         this.secret = secret;
         this.tokenValidityInSeconds = tokenValidityInSeconds;
 
         // 시크릿 값을 복호화(decode) 하여 키 변수에 할당
         byte[] keyBytes = Decoders.BASE64.decode(secret);
-        this.key = Keys.hmacShaKeyFor(keyBytes);
+        key = Keys.hmacShaKeyFor(keyBytes);
     }
 
     public String createToken(Authentication authentication) {
@@ -43,13 +48,13 @@ public class TokenProvider {
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
 
-        long now = (new Date()).getTime();
-        Date validity = new Date(now + this.tokenValidityInSeconds * 1000);
+        Date expires = new Date((new Date()).getTime() + tokenValidityInSeconds * 1000);
+
         return Jwts.builder()
                 .setSubject(authentication.getName())
                 .claim(AUTHORITIES_KEY, authorities)
                 .signWith(key, SignatureAlgorithm.HS512) // HMAC + SHA512
-                .setExpiration(validity)
+                .setExpiration(expires)
                 .compact();
     }
 
@@ -68,15 +73,17 @@ public class TokenProvider {
                 .parseClaimsJws(token)
                 .getPayload();
 
-        List<? extends GrantedAuthority> authorities =
-                Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
-                        .map(SimpleGrantedAuthority::new)
-                        .collect(Collectors.toList());
+        String email = claims.getSubject();
+        MemberInfo userDetails = (MemberInfo)infoService.loadUserByUsername(email);
 
-        MemberInfo memberInfo = (MemberInfo)memberInfoService.loadUserByUsername(claims.getSubject());
-        memberInfo.setAuthorities(authorities);
+        String auth = claims.get(AUTHORITIES_KEY).toString();
+        List<? extends GrantedAuthority> authorities = Arrays.stream(auth.split(","))
+                .map(SimpleGrantedAuthority::new).toList();
+        userDetails.setAuthorities(authorities);
 
-        return new UsernamePasswordAuthenticationToken(memberInfo, token, authorities);
+        Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, token, authorities);
+
+        return authentication;
     }
 
     /**
@@ -85,22 +92,21 @@ public class TokenProvider {
      * @param token
      * @return
      */
-    public boolean validateToken(String token) {
+    public void validateToken(String token) {
         try {
-            Claims claims = Jwts.parser().setSigningKey(key).build().parseClaimsJws(token).getBody();
-            return true;
-        } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
-            log.info("잘못된 JWT 서명입니다.");
-        } catch (ExpiredJwtException e) {
-            log.info("만료된 JWT 토큰입니다.");
-        } catch (UnsupportedJwtException e) {
-            log.info("지원되지 않는 JWT 토큰 입니다.");
-        } catch (IllegalArgumentException e) {
-            log.info("JWT 토큰이 잘못되었습니다.");
-            e.printStackTrace();
-        }
+            Claims claims = Jwts.parser()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(token)
+                    .getPayload();
 
-        return false;
+        } catch (ExpiredJwtException e) {
+            throw new BadRequestException(Utils.getMessage("EXPIRED.JWT_TOKEN", "validation"));
+        } catch (UnsupportedJwtException e) {
+            throw new BadRequestException(Utils.getMessage("UNSUPPORTED.JWT_TOKEN", "validation"));
+        } catch (SecurityException | MalformedJwtException | IllegalArgumentException e) {
+            throw new BadRequestException(Utils.getMessage("INVALID_FORMAT.JWT_TOKEN", "validation"));
+        }
     }
 
 }

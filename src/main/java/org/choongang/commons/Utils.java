@@ -9,6 +9,7 @@ import org.choongang.file.service.FileInfoService;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
+import org.springframework.validation.FieldError;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -87,13 +88,30 @@ public class Utils {
         return getMessage(code, null);
     }
 
-    public static List<String> getMessages(Errors errors) {
-        return errors.getFieldErrors()
-                .stream()
-                .flatMap(f -> Arrays.stream(f.getCodes()).sorted(Comparator.reverseOrder())
-                        .map(c -> getMessage(c)))
-                .filter(s -> s != null && !s.isBlank()).toList();
+    public static Map<String, List<String>> getMessages(Errors errors) {
+        try {
+            Map<String, List<String>> data = new HashMap<>();
+            for (FieldError error : errors.getFieldErrors()) {
+                String field = error.getField();
+                List<String> messages = Arrays.stream(error.getCodes()).sorted(Comparator.reverseOrder())
+                        .map(c -> getMessage(c))
+                        .filter(s -> s != null && !s.isBlank())
+                        .toList();
+
+                data.put(field, messages);
+            }
+            return data;
+
+        } catch (Exception e) {
+            return null;
+        }
+
     }
+//        return errors.getFieldErrors()
+//                .stream()
+//                .flatMap(f -> Arrays.stream(f.getCodes()).sorted(Comparator.reverseOrder())
+//                        .map(c -> getMessage(c)))
+//                .filter(s -> s != null && !s.isBlank()).toList();
 
     /**
      * \n 또는 \r\n -> <br>

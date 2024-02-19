@@ -17,7 +17,7 @@ public class ChatHistory extends Base {
     private Long seq;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "roomId")
+    @JoinColumn(name = "roomNo")
     private ChatRoom chatRoom;
 
     @ManyToOne(fetch = FetchType.LAZY)

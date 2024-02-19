@@ -41,7 +41,7 @@ public class SecurityConfig {
         http.csrf(c -> c.disable())
                 .addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(customJwtFilter, UsernamePasswordAuthenticationFilter.class)
-                .sessionManagement(c -> c.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
+                .sessionManagement(c -> c.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .exceptionHandling(c -> {
                     c.authenticationEntryPoint(jwtAuthenticationEntryPoint).accessDeniedHandler(jwtAccessDeniedHandler);
                 })
@@ -53,7 +53,9 @@ public class SecurityConfig {
                                     "/api/v1/member/email_dup_check",
                                     "/api/v1/email/**",
                                     "/api/v1/email/auth_check",
-                                    "/api/v1/member/exists/**").permitAll()
+                                    "/api/v1/member/exists/**",
+                                    "/api/v1/chat/", "/chat" // 개발 완료 후 삭제!
+                            ).permitAll()
                             .anyRequest().authenticated();
                 });
 

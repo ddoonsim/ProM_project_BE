@@ -3,6 +3,9 @@ package org.choongang.email.service;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.choongang.commons.Utils;
+import org.choongang.commons.entities.EmailAuth;
+import org.choongang.commons.repositories.EmailAuthRedisRepository;
+import org.choongang.member.MemberUtil;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -12,17 +15,25 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class EmailVerifyService {
     private final EmailSendService sendService;
-    private final HttpSession session;
-
+    private final EmailAuthRedisRepository repository;
+    private final MemberUtil memberUtil;
     /**
      * 이메일 인증 번호 발급 전송
      */
     public boolean sendCode(String email) {
         int authNum = (int)(Math.random() * 99999);
 
-        session.setAttribute("EmailAuthNum", authNum);
-        System.out.println("세션에 저장된 EmailAuthNum : " + session.getAttribute("EmailAuthNum").toString());
-        session.setAttribute("EmailAuthStart", System.currentTimeMillis());
+//        session.setAttribute("EmailAuthNum", authNum);
+//        System.out.println("세션에 저장된 EmailAuthNum : " + session.getAttribute("EmailAuthNum").toString());
+//        session.setAttribute("EmailAuthStart", System.currentTimeMillis());
+
+        /* 레디스에 인증 정보 저장 S */
+        EmailAuth emailAuth = EmailAuth.builder()
+                .browserId(memberUtil.getBrowserId())
+                .authCode(authNum)
+                .build();
+        repository.save(emailAuth);
+        /* 레디스에 인증 정보 저장 E */
 
         EmailMessage emailMessage = new EmailMessage(
                 email,
@@ -38,14 +49,17 @@ public class EmailVerifyService {
      * 발급 받은 인증번호와 사용자 입력 코드와 일치 여부 체크
      */
     public boolean check(int code) {
+        System.out.println();
+        EmailAuth emailAuth = repository.findById(memberUtil.getBrowserId()).orElse(null);
 
-        Integer authNum = (Integer)session.getAttribute("EmailAuthNum");
-        System.out.println("authNum : " + session.getAttribute("EmailAuthNum"));
-        Long stime = (Long)session.getAttribute("EmailAuthStart");
-        System.out.println("stime : " + session.getAttribute("EmailAuthStart"));
+        System.out.println("emailAuth" + emailAuth);
+//        Integer authNum = (Integer)session.getAttribute("EmailAuthNum");
+//        System.out.println("authNum : " + session.getAttribute("EmailAuthNum"));
+//        Long stime = (Long)session.getAttribute("EmailAuthStart");
+//        System.out.println("stime : " + session.getAttribute("EmailAuthStart"));
 
+        /*
         if (authNum != null && stime != null) {
-            /* 인증 시간 만료 여부 체크 - 3분 유효시간 S */
             boolean isExpired = (System.currentTimeMillis() - stime.longValue()) > 1000 * 60 * 3;
 
             if (isExpired) { // 만료되었다면 세션 비우고 검증 실패 처리
@@ -53,16 +67,22 @@ public class EmailVerifyService {
                 session.removeAttribute("EmailAuthStart");
 
                 return false;
-            }
+            } */
+
+        if (emailAuth == null || emailAuth.getAuthCode() == 0) {
+            return false;
+        }
             /* 인증 시간 만료 여부 체크 E */
 
+
             // 사용자 입력 코드와 발급 코드가 일치하는지 여부 체크
-            boolean isVerified = code == authNum.intValue();
-            session.setAttribute("EmailAuthVerified", isVerified);
+            boolean isVerified = code == emailAuth.getAuthCode();
+            emailAuth.setVerified(isVerified);
+            repository.save(emailAuth);
+        System.out.println("emailAuth" + emailAuth);
 
             return isVerified;
         }
 
-        return false;
-    }
+
 }

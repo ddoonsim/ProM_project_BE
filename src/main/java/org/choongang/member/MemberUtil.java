@@ -1,16 +1,22 @@
 package org.choongang.member;
 
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.choongang.configs.jwt.CustomJwtFilter;
 import org.choongang.member.entities.Member;
 import org.choongang.member.service.MemberInfo;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 @Component
 @RequiredArgsConstructor
 public class MemberUtil {
+
+    private final CustomJwtFilter customJwtFilter;
+    private final HttpServletRequest request;
 
     /**
      * 현재 로그인되어 있는 회원 객체 가져오기
@@ -30,5 +36,14 @@ public class MemberUtil {
      */
     public boolean isLogin() {
         return getMember() != null;
+    }
+
+    public String getAuthToken() {
+        return customJwtFilter.resolveToken(request);
+    }
+
+    public long getBrowserId() {
+        String value = request.getHeader("browserId");
+        return StringUtils.hasText(value) ? Long.parseLong(value) : 0L;
     }
 }

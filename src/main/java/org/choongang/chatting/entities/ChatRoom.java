@@ -12,9 +12,8 @@ import org.choongang.member.entities.Member;
 @Data @Builder
 @NoArgsConstructor @AllArgsConstructor
 public class ChatRoom extends Base {
-    @Id
-    @Column(length=65)
-    private String roomId;
+    @Id @GeneratedValue
+    private Long roomNo;
 
     @Column(length=45, nullable = false)
     private String roomNm;

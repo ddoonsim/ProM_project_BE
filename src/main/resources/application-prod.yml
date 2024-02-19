@@ -4,6 +4,11 @@ server:
   port: 2000
 
 spring:
+  # Redis 설정
+  redis:
+    host: ${redis.host}
+    port: ${redis.port}
+
   # 파일 업로드 용량 설정
   servlet:
     multipart:

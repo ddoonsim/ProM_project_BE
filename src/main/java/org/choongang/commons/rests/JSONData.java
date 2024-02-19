@@ -14,6 +14,6 @@ public class JSONData<T> {
     private boolean success = true ;    // 성공 여부
     @NonNull
     private T data ;    // 성공 시에 서버에 전달될 데이터
-    private String message ;    // 에러 메세지
+    private Object message ;    // 에러 메세지
 }
 

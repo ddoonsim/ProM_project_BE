@@ -45,8 +45,7 @@ public class ProjectController {
 
     private void errorProcess(Errors errors) {
         if (errors.hasErrors()) {
-            List<String> errorMessages = Utils.getMessages(errors);
-            throw new BadRequestException(errorMessages.stream().collect(Collectors.joining("||")));
+            throw new BadRequestException(Utils.getMessages(errors));
         }
     }
 

@@ -1,5 +1,6 @@
 package org.choongang.project.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,6 +20,7 @@ public class Project extends BaseMember {
     @Id @GeneratedValue
     private Long seq;
 
+    @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "member_project")
     private List<Member> member = new ArrayList<>();    // 참여자

@@ -1,5 +1,6 @@
 package org.choongang.member.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -42,6 +43,7 @@ public class Member extends Base {
     @Column(length=30, nullable = false)
     private MemberType type = MemberType.USER;
 
+    @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "member_project")
     private List<Project> project = new ArrayList<>();    // 참여 중인 프로젝트

@@ -20,4 +20,12 @@ public class ProjectInfoService {
         List<Project> projects = projectRepository.findByMemberSeq(memberSeq).orElse(null);
         return projects;
     }
+
+    /**
+     * 프로젝트 조회
+     */
+    public Project viewOne(Long projectSeq) {
+        Project project = projectRepository.findById(projectSeq).orElse(null);
+        return project;
+    }
 }

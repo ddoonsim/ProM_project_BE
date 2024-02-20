@@ -15,7 +15,6 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -25,6 +24,17 @@ public class ProjectController {
     private final SaveProjectService saveService;
     private final ProjectInfoService infoService;
     private final MemberUtil memberUtil;
+
+    /**
+     * 프로젝트 상세 보기에 데이터를 전달할 컨트롤러
+     */
+    @GetMapping
+    public JSONData<Project> projectView(@RequestParam("projectSeq") Long projectSeq) {
+        Project project = infoService.viewOne(projectSeq);
+
+        JSONData<Project> item = new JSONData<>(project);
+        return item;
+    }
 
     /**
      * 새 프로젝트 생성

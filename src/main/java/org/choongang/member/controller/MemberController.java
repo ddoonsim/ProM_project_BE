@@ -102,10 +102,10 @@ public class MemberController {
     }
 
     @GetMapping("/info")
-    public JSONData info(@AuthenticationPrincipal MemberInfo memberInfo) {
+    public JSONData<Object> info(@AuthenticationPrincipal MemberInfo memberInfo) {
         Member member = memberInfo.getMember();
 
-        return new JSONData(member);
+        return new JSONData<>(member);
     }
 
 

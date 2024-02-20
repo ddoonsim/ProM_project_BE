@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -46,7 +47,8 @@ public class FileUploadService {
 
         String uploadPath = fileProperties.getPath(); // 파일 업로드 기본 경로
 
-        List<int[]> thumbsSize = utils.getThumbSize();
+        //List<int[]> thumbsSize = utils.getThumbSize();
+        List<int[]> thumbsSize = Arrays.asList(new int[]{100, 100}, new int[] { 200, 200 });
         String thumbPath = uploadPath + "thumbs/"; // 썸네일 업로드 기본 경로
 
         List<FileInfo> uploadedFiles = new ArrayList<>(); // 업로드 성공 파일 정보 목록

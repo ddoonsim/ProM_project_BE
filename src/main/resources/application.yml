@@ -7,6 +7,11 @@ spring:
   profiles:
     active: dev
 
+  # Redis 설정
+  redis:
+    host: localhost
+    port: 6379
+
   # 파일 업로드 용량 설정
   servlet:
     multipart:

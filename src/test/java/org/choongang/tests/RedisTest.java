@@ -21,6 +21,6 @@ public class RedisTest {
         repository.save(auth);
 
         EmailAuth auth2 = repository.findById(1L).orElse(null);
-        System.out.println(auth2);
+        System.out.println("auth2 : " + auth2);
     }
 }

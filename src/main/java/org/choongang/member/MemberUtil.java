@@ -38,10 +38,16 @@ public class MemberUtil {
         return getMember() != null;
     }
 
+    /**
+     * 토큰 가져오기
+     */
     public String getAuthToken() {
         return customJwtFilter.resolveToken(request);
     }
 
+    /**
+     * 브라우저 아이디 --> 식별 가능한 키
+     */
     public long getBrowserId() {
         String value = request.getHeader("browserId");
         return StringUtils.hasText(value) ? Long.parseLong(value) : 0L;

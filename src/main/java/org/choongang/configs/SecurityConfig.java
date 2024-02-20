@@ -54,6 +54,7 @@ public class SecurityConfig {
                                     "/api/v1/email/**",
                                     "/api/v1/email/auth_check",
                                     "/api/v1/member/exists/**",
+                                    "/api/v1/file/**",
                                     "/api/v1/chat/", "/chat" // 개발 완료 후 삭제!
                             ).permitAll()
                             .anyRequest().authenticated();

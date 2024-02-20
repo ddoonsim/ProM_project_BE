@@ -24,8 +24,6 @@ public class ChatHistory extends Base {
     @JoinColumn(name="memberSeq")
     private Member member;
 
-    @Column(length=40, nullable = false)
-    private String nickName;
 
     @Column(length=500, nullable = false)
     private String message;

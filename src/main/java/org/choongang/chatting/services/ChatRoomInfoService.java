@@ -22,7 +22,7 @@ public class ChatRoomInfoService {
 
     public ChatRoom get(Long roomNo) {
         ChatRoom room = roomRepository.findById(roomNo).orElseThrow();
-
+        System.out.println("======================" + room);
         return room;
     }
 }

@@ -24,10 +24,15 @@ public class ChatHandler extends TextWebSocketHandler {
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         String msg = message.getPayload();
         System.out.println("==========message: " + msg);
+        for (WebSocketSession s : sessions) {
+            s.sendMessage(message);
+        }
     }
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
         System.out.println("==========웹소켓 종료");
+        sessions.remove(session);
+
     }
 }

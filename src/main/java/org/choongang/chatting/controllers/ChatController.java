@@ -26,7 +26,6 @@ public class ChatController {
 
     @GetMapping("/rooms")
     public ResponseEntity<JSONData<List<ChatRoom>>> rooms() {
-        System.out.println("=================/api/v1/chat/rooms");
         List<ChatRoom> rooms = chatRoomInfoService.getList();
         JSONData<List<ChatRoom>> data = new JSONData<>();
         data.setSuccess(true);
@@ -36,7 +35,8 @@ public class ChatController {
     }
 
     @GetMapping("/room/{roomNo}")
-    public JSONData<ChatRoom> roomInfo(@PathVariable Long roomNo) {
+    public JSONData<ChatRoom> roomInfo(@PathVariable("roomNo") Long roomNo) {
+        System.out.println("=================/api/v1/chat/room/"+roomNo);
         ChatRoom room = chatRoomInfoService.get(roomNo);
         JSONData<ChatRoom> data = new JSONData<>();
         data.setData(room);

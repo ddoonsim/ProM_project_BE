@@ -12,7 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/file")
+@RequestMapping("/api/v1/file")
 @RequiredArgsConstructor
 public class ApiFileController implements ExceptionRestProcessor { // 통일된 방식으로 에러 응답
 
@@ -21,11 +21,11 @@ public class ApiFileController implements ExceptionRestProcessor { // 통일된 
 
     @PostMapping
     public JSONData<List<FileInfo>> upload(@RequestParam("file") MultipartFile[] files,
-                           @RequestParam(name = "gid", required = false) String gid,
-                           // gid는 필수, 없으면 기본값을 넣는다. location은 필수는 아니다
-                           @RequestParam(name = "location", required = false) String location,
-                           @RequestParam(name = "imageOnly", required = false) boolean imageOnly,
-                           @RequestParam(name = "singleFile", required = false) boolean singleFile) {
+                                           @RequestParam(name = "gid", required = false) String gid,
+                                           // gid는 필수, 없으면 기본값을 넣는다. location은 필수는 아니다
+                                           @RequestParam(name = "location", required = false) String location,
+                                           @RequestParam(name = "imageOnly", required = false) boolean imageOnly,
+                                           @RequestParam(name = "singleFile", required = false) boolean singleFile) {
 
         List<FileInfo> uploadedFiles = uploadService.upload(files, gid, location, imageOnly, singleFile);
 

@@ -53,7 +53,8 @@ public class SecurityConfig {
                                     "/api/v1/member/email_dup_check",
                                     "/api/v1/email/**",
                                     "/api/v1/email/auth_check",
-                                    "/api/v1/member/exists/**").permitAll()
+                                    "/api/v1/member/exists/**",
+                                    "/api/v1/file/**").permitAll()
                             .anyRequest().authenticated();
                 });
 

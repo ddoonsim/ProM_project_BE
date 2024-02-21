@@ -54,7 +54,7 @@ public class SecurityConfig {
                                     "/api/v1/email/**",
                                     "/api/v1/email/auth_check",
                                     "/api/v1/member/exists/**",
-                                    "/api/v1/file/**").permitAll()
+                                    "/api/v1/file/**", "/uploads/**").permitAll()
                             .anyRequest().authenticated();
                 });
 

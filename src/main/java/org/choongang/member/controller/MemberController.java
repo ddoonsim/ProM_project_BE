@@ -3,12 +3,14 @@ package org.choongang.member.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.tomcat.Jar;
 import org.choongang.commons.Utils;
 import org.choongang.commons.exceptions.BadRequestException;
 import org.choongang.commons.rests.JSONData;
 import org.choongang.member.MemberUtil;
 import org.choongang.member.entities.Member;
 import org.choongang.member.repositories.MemberRepository;
+import org.choongang.member.service.FindPwService;
 import org.choongang.member.service.MemberInfo;
 import org.choongang.member.service.MemberJoinService;
 import org.choongang.member.service.MemberLoginService;
@@ -17,6 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,6 +37,7 @@ public class MemberController {
     private final MemberLoginService loginService ;
     private final MemberRepository memberRepository;
     private final MemberUtil memberUtil;
+    private FindPwService findPwService;
 
     /**
      * accessToken 발급
@@ -95,6 +99,27 @@ public class MemberController {
         return ResponseEntity.status(status).body(data);
     }
 
+    /**
+     * 비밀번호 찾기 처리
+     */
+    @PostMapping("/find_pw")
+    public ResponseEntity<JSONData<Object>> findPw (@Valid RequestFindPw form, Errors errors) {
+        boolean existsByEmailAndName = memberRepository.existsByEmailAndName(form.email(), form.name());
+
+        findPwService.process(form, errors); // 비밀번호 찾기 처리
+
+        // 유효성 검사 처리
+        errorProcess(errors);
+
+        HttpStatus status = HttpStatus.OK;
+        JSONData<Object> data = new JSONData<>();
+        data.setSuccess(true);
+        data.setStatus(status);
+
+        return ResponseEntity.status(status).body(data);
+    }
+
+
     private void errorProcess(Errors errors) {
         if (errors.hasErrors()) {
             throw new BadRequestException(Utils.getMessages(errors));
@@ -103,9 +128,7 @@ public class MemberController {
 
     @GetMapping("/info")
     public JSONData<Object> info(@AuthenticationPrincipal MemberInfo memberInfo) {
-        Member member = memberInfo.getMember();
-
-        return new JSONData<>(member);
+        return memberInfo == null ? new JSONData() : new JSONData(memberInfo.getMember());
     }
 
 

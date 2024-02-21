@@ -2,7 +2,9 @@ package org.choongang.chatting.controllers;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.choongang.chatting.entities.ChatHistory;
 import org.choongang.chatting.entities.ChatRoom;
+import org.choongang.chatting.services.ChatMessageInfoService;
 import org.choongang.chatting.services.ChatMessageService;
 import org.choongang.chatting.services.ChatRoomInfoService;
 import org.choongang.chatting.services.ChatRoomSaveService;
@@ -14,6 +16,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -23,6 +26,7 @@ public class ChatController {
     private final ChatRoomSaveService chatRoomSaveService;
     private final ChatRoomInfoService chatRoomInfoService;
     private final ChatMessageService messageService;
+    private final ChatMessageInfoService messageInfoService;
 
     @GetMapping("/rooms")
     public ResponseEntity<JSONData<List<ChatRoom>>> rooms() {
@@ -35,11 +39,16 @@ public class ChatController {
     }
 
     @GetMapping("/room/{roomNo}")
-    public JSONData<ChatRoom> roomInfo(@PathVariable("roomNo") Long roomNo) {
+    public JSONData<List<ChatHistory>> roomInfo(@PathVariable("roomNo") Long roomNo) {
         System.out.println("=================/api/v1/chat/room/"+roomNo);
         ChatRoom room = chatRoomInfoService.get(roomNo);
-        JSONData<ChatRoom> data = new JSONData<>();
-        data.setData(room);
+        ChatHistory defaultHistory = new ChatHistory(null,room,null,null);
+        List<ChatHistory> messages = messageInfoService.getList(roomNo);
+        messages.add(0,defaultHistory);
+
+        System.out.println(messages);
+        JSONData<List<ChatHistory>> data = new JSONData<>();
+        data.setData(messages);
 
         return data;
     }

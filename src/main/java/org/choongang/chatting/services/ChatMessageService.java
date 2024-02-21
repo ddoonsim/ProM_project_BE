@@ -22,7 +22,7 @@ public class ChatMessageService {
         ChatRoom room = roomRepository.findById(roomNo).orElseThrow();
 
         ChatHistory history = ChatHistory.builder()
-                .member(memberRepository.findById(memberSeq).orElse(null))
+                .member(memberRepository.findById(memberSeq).orElseThrow())
                 .message(form.message())
                 .chatRoom(room)
                 .build();

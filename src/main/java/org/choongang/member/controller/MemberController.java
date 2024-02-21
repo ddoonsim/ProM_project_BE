@@ -127,7 +127,7 @@ public class MemberController {
     }
 
     @GetMapping("/info")
-    public JSONData<Object> info(@AuthenticationPrincipal MemberInfo memberInfo) {
+    public JSONData info(@AuthenticationPrincipal MemberInfo memberInfo) {
         return memberInfo == null ? new JSONData() : new JSONData(memberInfo.getMember());
     }
 

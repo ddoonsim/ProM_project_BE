@@ -93,6 +93,8 @@ public class FileInfoService {
      * @param fileInfo
      */
     public void addFileInfo(FileInfo fileInfo) {
+        String host = String.format("%s://%s:%d",
+                request.getScheme(), request.getServerName(), request.getServerPort());
         long seq = fileInfo.getSeq();
         long dir = seq % 10L;
         String fileName = seq + fileInfo.getExtension();
@@ -102,7 +104,7 @@ public class FileInfoService {
         // 서버에 올라가는 실제 파일 경로
         String filePath = fileProperties.getPath() + dir + "/" + fileName;
         // 접근할 수있는 URL
-        String fileUrl = request.getContextPath() + fileProperties.getUrl() + dir + "/" + fileName;
+        String fileUrl = host + request.getContextPath() + fileProperties.getUrl() + dir + "/" + fileName;
 
         fileInfo.setFilePath(filePath);
         fileInfo.setFileUrl(fileUrl);
@@ -114,7 +116,7 @@ public class FileInfoService {
         List<String> thumbsUrl = new ArrayList<>();
 
         String thumbDir = getThumbDir(seq);
-        String thumbUrl = getThumbUrl(seq);
+        String thumbUrl = host + getThumbUrl(seq);
 
         File _thumbDir = new File(thumbDir);
 

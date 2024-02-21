@@ -9,6 +9,7 @@ import org.choongang.member.entities.Member;
 import org.choongang.member.repositories.MemberRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
 
 import java.util.UUID;
@@ -33,8 +34,11 @@ public class MemberJoinService {
 
     public void save(RequestJoin form) {
         String password = passwordEncoder.encode(form.password());
+
+        String gid = StringUtils.hasText(form.gid()) ? form.gid() : UUID.randomUUID().toString();
+
         Member member = Member.builder()
-                .gid(UUID.randomUUID().toString())
+                .gid(gid)
                 .name(form.name())
                 .email(form.email())
                 .password(password)

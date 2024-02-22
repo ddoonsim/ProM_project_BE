@@ -30,6 +30,8 @@ public class MemberUpdateService {
             member.setPassword(encoder.encode(password.trim()));
         }
 
+        member.setMobile(form.getMobile());
+
         member.setProfileImage(form.getProfileImage());
 
         memberRepository.saveAndFlush(member);

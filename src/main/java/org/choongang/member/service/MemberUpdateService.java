@@ -32,8 +32,6 @@ public class MemberUpdateService {
 
         member.setProfileImage(form.getProfileImage());
 
-        member.setMobile(form.getMobile());
-
         memberRepository.saveAndFlush(member);
 
         fileUploadService.processDone(member.getGid());

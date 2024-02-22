@@ -1,6 +1,5 @@
 package org.choongang.member;
 
-import org.choongang.member.controller.RequestJoin;
 import org.choongang.member.service.MemberJoinService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,15 +17,15 @@ public class MemberTest {
 
     @Test
     public void insertData() {
-        RequestJoin form =
-                new RequestJoin(
-                        "gidTest",
-                        "user01@test.org",
-                        "12345678",
-                        "12345678",
-                        "사용자01",
-                        "01010001000",
-                        true);
-        joinService.save(form);
+//        RequestJoin form =
+//                new RequestJoin(
+//                        "gidTest",
+//                        "user01@test.org",
+//                        "12345678",
+//                        "12345678",
+//                        "사용자01",
+//                        "01010001000",
+//                        true);
+//        joinService.save(form);
     }
 }

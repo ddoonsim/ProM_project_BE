@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.choongang.chatting.entities.ChatRoom;
 import org.choongang.commons.entities.BaseMember;
 import org.choongang.member.entities.Member;
 
@@ -41,4 +42,8 @@ public class Project extends BaseMember {
                 ", isValidUserOnly=" + isValidUserOnly +
                 '}';
     }
+
+    @OneToOne
+    @JoinColumn(name = "roomNo")
+    private ChatRoom chatRoom;
 }

@@ -28,7 +28,8 @@ public interface ExceptionRestProcessor {
         data.setMessage(e.getMessage());
 
         e.printStackTrace();
-
+        System.out.println("유입?");
+        System.out.println(data);
         return ResponseEntity.status(status).body(data);
     }
 }

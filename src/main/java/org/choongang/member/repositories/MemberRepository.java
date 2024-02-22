@@ -24,13 +24,25 @@ public interface MemberRepository extends JpaRepository<Member, Long>, QuerydslP
     /**
      * 이메일과 회원명으로 조회되는지 체크
      */
-    default boolean existsByEmailAndName(String email, String name) {
+    default Optional<Boolean> existsByEmailAndName(String email, String name) {
         QMember member = QMember.member;
         BooleanBuilder builder = new BooleanBuilder();
         builder.and(member.email.eq(email))
                 .and(member.name.eq(name));
 
-        return exists(builder);
+        return Optional.ofNullable(exists(builder));
+    }
+
+    /**
+     * 전화번호로 조회되는지 체크
+     */
+    default Optional<Boolean> existsByMobileAndName(String name, String mobile) {
+        QMember member = QMember.member;
+        BooleanBuilder builder = new BooleanBuilder();
+        builder.and(member.mobile.eq(mobile))
+                .and(member.name.eq(name));
+
+        return Optional.ofNullable(exists(builder));
     }
 
 

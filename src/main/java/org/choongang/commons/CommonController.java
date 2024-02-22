@@ -1,4 +1,4 @@
-package org.choongang.member;
+package org.choongang.commons;
 
 import org.choongang.commons.exceptions.CommonException;
 import org.choongang.commons.rests.JSONData;
@@ -9,18 +9,20 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-@RestControllerAdvice("org.choongang.member")
+import java.util.List;
+import java.util.Map;
+
+@RestControllerAdvice("org.choongang")
 public class CommonController {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<JSONData<Object>> errorHandler(Exception e) {
         HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
         Object message = e.getMessage();
-
         if (e instanceof CommonException) {
             CommonException commonException = (CommonException) e;
             status = commonException.getStatus();
-
-            if (commonException.getMessages() != null) message = commonException.getMessages();
+            Map<String, List<String>> messages = commonException.getMessages();
+            if (commonException.getMessages() != null && !messages.isEmpty()) message = commonException.getMessages();
         } else if (e instanceof BadCredentialsException) {
             status = HttpStatus.UNAUTHORIZED; // 401
         } else if (e instanceof AccessDeniedException) {
@@ -28,12 +30,12 @@ public class CommonController {
         }
         // BadCredentialsException -> 500 -> 401
         // AccessDeniedException -> 500 -> 403
-
+        // AccessDeniedException -> 500 -> 403
         JSONData<Object> data = new JSONData<>();
         data.setSuccess(false);
         data.setStatus(status);
         data.setMessage(message);
-
+        
         e.printStackTrace();
 
         return ResponseEntity.status(status).body(data);

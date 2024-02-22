@@ -1,10 +1,12 @@
 package org.choongang.myPage.controllers;
 
 import org.choongang.commons.validators.PasswordValidator;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
+@Component
 public class ProfileValidator implements Validator, PasswordValidator {
 
     @Override

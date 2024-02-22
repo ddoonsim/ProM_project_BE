@@ -25,7 +25,7 @@ public class FindIdValidator implements Validator, MobileValidator {
 
         RequestFindId form = (RequestFindId) target;
         String name = form.name();
-        String mobile = form.mobile();
+        String mobile = form.mobile().replaceAll("\\D", "");
 
         // 1. 휴대전화번호 + 회원명 조합으로 조회 되는지 체크
         if (StringUtils.hasText(mobile) && !memberRepository.existsByMobileAndName(name, mobile).orElse(false)) {

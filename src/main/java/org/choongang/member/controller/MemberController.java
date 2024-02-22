@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,6 +30,7 @@ public class MemberController {
     private final MemberRepository memberRepository;
     private final MemberUtil memberUtil;
     private final FindPwService findPwService;
+    private final FindIdService findIdService;
 
     /**
      * accessToken 발급
@@ -119,25 +121,23 @@ public class MemberController {
      * 아이디 찾기 처리
      */
     @PostMapping("/find_id")
-    public ResponseEntity<JSONData<Object>> findId (@Valid @RequestBody RequestFindId form, Errors errors) {
+    public JSONData<Object> findId (@Valid @RequestBody RequestFindId form, Errors errors) {
         JSONData<Object> data = new JSONData<>();
-
-        boolean isExistsByMobileAndName = memberRepository.existsByMobileAndName(form.name(), form.mobile()).orElseThrow(MemberNotFoundException::new);
+        String mobile = form.mobile();
+        if (StringUtils.hasText(mobile)) mobile = mobile.replaceAll("\\D", "");
+        boolean isExistsByMobileAndName = memberRepository.existsByMobileAndName(form.name(), mobile).orElseThrow(MemberNotFoundException::new);
         data.setSuccess(false);
 
-        HttpStatus status = HttpStatus.OK;
-        data.setStatus(status);
 
         data.setSuccess(isExistsByMobileAndName);
-        data.setStatus(status);
 
         // 아이디 검증 및 이메일 찾기 처리
-        //FindIdService.process(form, errors);
+        String email = findIdService.process(form, errors);
 
         // 유효성 검사 처리
         errorProcess(errors);
 
-        return ResponseEntity.status(status).body(data);
+        return new JSONData<>(email);
     }
 
 

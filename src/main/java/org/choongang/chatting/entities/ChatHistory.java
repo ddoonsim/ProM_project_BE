@@ -17,15 +17,13 @@ public class ChatHistory extends Base {
     private Long seq;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "roomId")
+    @JoinColumn(name = "roomNo")
     private ChatRoom chatRoom;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="memberSeq")
     private Member member;
 
-    @Column(length=40, nullable = false)
-    private String nickName;
 
     @Column(length=500, nullable = false)
     private String message;

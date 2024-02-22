@@ -37,7 +37,7 @@ public class MemberController {
     private final MemberLoginService loginService ;
     private final MemberRepository memberRepository;
     private final MemberUtil memberUtil;
-    private FindPwService findPwService;
+    private final FindPwService findPwService;
 
     /**
      * accessToken 발급
@@ -103,18 +103,19 @@ public class MemberController {
      * 비밀번호 찾기 처리
      */
     @PostMapping("/find_pw")
-    public ResponseEntity<JSONData<Object>> findPw (@Valid RequestFindPw form, Errors errors) {
-        boolean existsByEmailAndName = memberRepository.existsByEmailAndName(form.email(), form.name());
+    public ResponseEntity<JSONData<Object>> findPw (@Valid @RequestBody RequestFindPw form, Errors errors) {
+        JSONData<Object> data = new JSONData<>();
 
-        findPwService.process(form, errors); // 비밀번호 찾기 처리
-
-        // 유효성 검사 처리
-        errorProcess(errors);
+        boolean isExistsByEmailAndName = memberRepository.existsByEmailAndName(form.email(), form.name());
+        data.setSuccess(isExistsByEmailAndName);
 
         HttpStatus status = HttpStatus.OK;
-        JSONData<Object> data = new JSONData<>();
-        data.setSuccess(true);
         data.setStatus(status);
+
+        // 비밀번호 찾기 처리
+        findPwService.process(form, errors);
+        // 유효성 검사 처리
+        errorProcess(errors);
 
         return ResponseEntity.status(status).body(data);
     }
@@ -127,7 +128,7 @@ public class MemberController {
     }
 
     @GetMapping("/info")
-    public JSONData<Object> info(@AuthenticationPrincipal MemberInfo memberInfo) {
+    public JSONData info(@AuthenticationPrincipal MemberInfo memberInfo) {
         return memberInfo == null ? new JSONData() : new JSONData(memberInfo.getMember());
     }
 

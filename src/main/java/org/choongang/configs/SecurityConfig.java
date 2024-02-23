@@ -51,6 +51,8 @@ public class SecurityConfig {
                                     "/api/v1/member/login",
                                     "/api/v1/member/info",
                                     "/api/v1/member/email_dup_check",
+                                    "/api/v1/member/find_pw",
+                                    "/api/v1/member/find_id",
                                     "/api/v1/email/**",
                                     "/api/v1/email/auth_check",
                                     "/api/v1/member/exists/**",

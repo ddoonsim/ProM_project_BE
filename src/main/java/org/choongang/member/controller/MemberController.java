@@ -3,29 +3,21 @@ package org.choongang.member.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.tomcat.Jar;
+import org.choongang.commons.ExceptionRestProcessor;
 import org.choongang.commons.Utils;
 import org.choongang.commons.exceptions.BadRequestException;
 import org.choongang.commons.rests.JSONData;
 import org.choongang.member.MemberUtil;
-import org.choongang.member.entities.Member;
 import org.choongang.member.repositories.MemberRepository;
-import org.choongang.member.service.FindPwService;
-import org.choongang.member.service.MemberInfo;
-import org.choongang.member.service.MemberJoinService;
-import org.choongang.member.service.MemberLoginService;
+import org.choongang.member.service.*;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -37,7 +29,8 @@ public class MemberController {
     private final MemberLoginService loginService ;
     private final MemberRepository memberRepository;
     private final MemberUtil memberUtil;
-    private FindPwService findPwService;
+    private final FindPwService findPwService;
+    private final FindIdService findIdService;
 
     /**
      * accessToken 발급
@@ -103,20 +96,48 @@ public class MemberController {
      * 비밀번호 찾기 처리
      */
     @PostMapping("/find_pw")
-    public ResponseEntity<JSONData<Object>> findPw (@Valid RequestFindPw form, Errors errors) {
-        boolean existsByEmailAndName = memberRepository.existsByEmailAndName(form.email(), form.name());
+    public ResponseEntity<JSONData<Object>> findPw (@Valid @RequestBody RequestFindPw form, Errors errors) {
+        JSONData<Object> data = new JSONData<>();
 
-        findPwService.process(form, errors); // 비밀번호 찾기 처리
+        boolean isExistsByEmailAndName = memberRepository.existsByEmailAndName(form.email(), form.name()).orElseThrow(MemberNotFoundException::new);
+        data.setSuccess(false);
+
+        HttpStatus status = HttpStatus.OK;
+        data.setStatus(status);
+
+        data.setSuccess(isExistsByEmailAndName);
+        data.setStatus(status);
+
+        // 비밀번호 찾기 처리
+        findPwService.process(form, errors);
 
         // 유효성 검사 처리
         errorProcess(errors);
 
-        HttpStatus status = HttpStatus.OK;
-        JSONData<Object> data = new JSONData<>();
-        data.setSuccess(true);
-        data.setStatus(status);
-
         return ResponseEntity.status(status).body(data);
+    }
+
+    /**
+     * 아이디 찾기 처리
+     */
+    @PostMapping("/find_id")
+    public JSONData<Object> findId (@Valid @RequestBody RequestFindId form, Errors errors) {
+        JSONData<Object> data = new JSONData<>();
+        String mobile = form.mobile();
+        if (StringUtils.hasText(mobile)) mobile = mobile.replaceAll("\\D", "");
+        boolean isExistsByMobileAndName = memberRepository.existsByMobileAndName(form.name(), mobile).orElseThrow(MemberNotFoundException::new);
+        data.setSuccess(false);
+
+
+        data.setSuccess(isExistsByMobileAndName);
+
+        // 아이디 검증 및 이메일 찾기 처리
+        String email = findIdService.process(form, errors);
+
+        // 유효성 검사 처리
+        errorProcess(errors);
+
+        return new JSONData<>(email);
     }
 
 

@@ -23,10 +23,6 @@ public class EmailVerifyService {
     public boolean sendCode(String email) {
         int authNum = (int)(Math.random() * 99999);
 
-//        session.setAttribute("EmailAuthNum", authNum);
-//        System.out.println("세션에 저장된 EmailAuthNum : " + session.getAttribute("EmailAuthNum").toString());
-//        session.setAttribute("EmailAuthStart", System.currentTimeMillis());
-
         /* redis에 인증 정보 저장 S */
         EmailAuth emailAuth = EmailAuth.builder()
                 .browserId(memberUtil.getBrowserId())

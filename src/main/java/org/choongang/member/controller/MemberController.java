@@ -143,7 +143,7 @@ public class MemberController {
 
     private void errorProcess(Errors errors) {
         if (errors.hasErrors()) {
-            throw new BadRequestException(Utils.getMessages(errors));
+            throw new BadRequestException(errors);
         }
     }
 

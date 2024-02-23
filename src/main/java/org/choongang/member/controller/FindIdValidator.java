@@ -29,8 +29,7 @@ public class FindIdValidator implements Validator, MobileValidator {
 
         // 1. 휴대전화번호 + 회원명 조합으로 조회 되는지 체크
         if (StringUtils.hasText(mobile) && !memberRepository.existsByMobileAndName(name, mobile).orElse(false)) {
-            errors.rejectValue("name", "NotFound.member");
-            errors.rejectValue("mobile", "NotFound.member");
+            errors.reject("NotFound.member");
         }
 
         // 2. 휴대전화번호 형식 체크

@@ -2,6 +2,8 @@ package org.choongang.project.controllers;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.choongang.chatting.repositories.ChatRoomRepository;
+import org.choongang.chatting.services.ChatRoomSaveService;
 import org.choongang.commons.Utils;
 import org.choongang.commons.exceptions.BadRequestException;
 import org.choongang.commons.rests.JSONData;
@@ -25,13 +27,21 @@ public class ProjectController {
     private final ProjectInfoService infoService;
     private final MemberUtil memberUtil;
 
+    private final ChatRoomSaveService chatRoomSaveService;
+    private final ChatRoomRepository chatRoomRepository;
+
     /**
      * 프로젝트 상세 보기에 데이터를 전달할 컨트롤러
      */
     @GetMapping
     public JSONData<Project> projectView(@RequestParam("projectSeq") Long projectSeq) {
         Project project = infoService.viewOne(projectSeq);
-
+        
+        /* 프로젝트 조회시 해당 프로젝트seq로 검색된 채팅방이 없으면 채팅방 생성 */
+        if (chatRoomRepository.findByProjectSeq(projectSeq).orElse(null) == null) {
+            chatRoomSaveService.save(project.getPName() + " 채팅방!", projectSeq);
+        }
+        
         JSONData<Project> item = new JSONData<>(project);
         return item;
     }

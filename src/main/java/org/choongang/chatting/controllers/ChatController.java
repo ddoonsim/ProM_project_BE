@@ -10,6 +10,8 @@ import org.choongang.chatting.services.ChatRoomInfoService;
 import org.choongang.chatting.services.ChatRoomSaveService;
 import org.choongang.commons.exceptions.BadRequestException;
 import org.choongang.commons.rests.JSONData;
+import org.choongang.project.entities.Project;
+import org.choongang.project.service.ProjectInfoService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
@@ -27,6 +29,7 @@ public class ChatController {
     private final ChatRoomInfoService chatRoomInfoService;
     private final ChatMessageService messageService;
     private final ChatMessageInfoService messageInfoService;
+    private final ProjectInfoService projectInfoService;
 
     @GetMapping("/rooms")
     public ResponseEntity<JSONData<List<ChatRoom>>> rooms() {
@@ -39,16 +42,20 @@ public class ChatController {
     }
 
     @GetMapping("/room/{roomNo}")
-    public JSONData<List<ChatHistory>> roomInfo(@PathVariable("roomNo") Long roomNo) {
-        System.out.println("=================/api/v1/chat/room/"+roomNo);
-        ChatRoom room = chatRoomInfoService.get(roomNo);
-        ChatHistory defaultHistory = new ChatHistory(null,room,null,null);
-        List<ChatHistory> messages = messageInfoService.getList(roomNo);
-        messages.add(0,defaultHistory);
+    public JSONData<List<ChatHistory>> roomInfo(@PathVariable("roomNo") String sNo) {
+        System.out.println("=================/api/v1/chat/room/"+sNo);
 
+        Long lNo = projectProvider(sNo);
+
+        ChatRoom room = chatRoomInfoService.get(lNo);
+        ChatHistory defaultHistory = new ChatHistory(null, room, null, null);
+        List<ChatHistory> messages = messageInfoService.getList(lNo);
+        messages.add(0,defaultHistory);
         System.out.println(messages);
+
         JSONData<List<ChatHistory>> data = new JSONData<>();
         data.setData(messages);
+
 
         return data;
     }
@@ -83,7 +90,6 @@ public class ChatController {
             throw new BadRequestException(message);
         }
 
-
         messageService.save(form);
         HttpStatus status = HttpStatus.CREATED;
         JSONData<Object> data = new JSONData<>();
@@ -91,5 +97,31 @@ public class ChatController {
         data.setStatus(status);
 
         return ResponseEntity.status(status).body(data);
+    }
+
+    /**
+     * 요청 채팅방 번호에 p가 포함되어있으면 projectSeq!
+     * projectSeq로 chatRoom을 검색해서
+     * chatRoom의 roomNo를 반환!
+     *
+     * @param seq
+     * @return
+     */
+    private Long projectProvider (String seq) {
+        Long lNo = 0L;
+
+        if (seq.contains("p")){
+            Long pNo = Long.parseLong(seq.replace("p",""));
+
+            Project p = projectInfoService.viewOne(pNo);
+
+            ChatRoom room = chatRoomInfoService.getByProjectSeq(p.getSeq());
+
+            lNo = room.getRoomNo();
+
+        } else {
+            lNo = Long.parseLong(seq);
+        }
+        return lNo;
     }
 }

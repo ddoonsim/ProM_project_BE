@@ -25,4 +25,9 @@ public class ChatRoomInfoService {
         System.out.println("======================" + room);
         return room;
     }
+
+    public ChatRoom getByProjectSeq(Long pSeq) {
+        ChatRoom room = roomRepository.findByProjectSeq(pSeq).orElseThrow();
+        return room;
+    }
 }

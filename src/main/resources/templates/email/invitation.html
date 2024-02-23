@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>이메일 인증</title>
+</head>
+<body>
+
+    <h2 th:text="${subject}"></h2>
+
+<dl>
+    <dt></dt>
+    <dd th:utext="${message}"></dd>
+</dl>
+<dl>
+    <dt>초대 링크</dt>
+    <a th:href="${invitationUrl}">프로젝트 초대 링크🔗</a>
+</dl>
+</body>
+</html>

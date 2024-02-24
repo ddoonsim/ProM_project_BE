@@ -8,9 +8,12 @@ import org.choongang.commons.Utils;
 import org.choongang.commons.exceptions.BadRequestException;
 import org.choongang.commons.rests.JSONData;
 import org.choongang.member.MemberUtil;
+import org.choongang.member.repositories.MemberRepository;
 import org.choongang.project.entities.Project;
+import org.choongang.project.repositories.ProjectRepository;
 import org.choongang.project.service.ProjectInfoService;
 import org.choongang.project.service.SaveProjectService;
+import org.choongang.project.service.UpdateProjectService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
@@ -25,6 +28,10 @@ public class ProjectController {
 
     private final SaveProjectService saveService;
     private final ProjectInfoService infoService;
+    private final ProjectRepository projectRepository;
+    private final UpdateProjectService updateProjectService;
+
+    private final MemberRepository memberRepository;
     private final MemberUtil memberUtil;
 
     private final ChatRoomSaveService chatRoomSaveService;
@@ -93,10 +100,28 @@ public class ProjectController {
     public void editProject() {}
 
     /**
-     * 프로젝트에 참여자 초대
+     * 프로젝트에 초대된 회원을 프로젝트 참여자 리스트에 추가
      */
-    @GetMapping("/invite")
-    public void inviteMember() {}
+    @GetMapping("/addTeamMember")
+    public ResponseEntity<JSONData<Object>> addTeamMember(@RequestParam("projectSeq")Long projectSeq) {
+        String email = memberUtil.getMember().getEmail();  // 로그인 중인 회원의 이메일
+        Project project = projectRepository.findById(projectSeq).orElse(null);
+        // 커맨드 객체
+        RequestProjectForm form = RequestProjectForm.builder()
+                .seq(project.getSeq())
+                .pName(project.getPName())
+                .member(project.getMember())
+                .build();
+        updateProjectService.updateMember(form, email);
+
+        HttpStatus status = HttpStatus.OK;
+        JSONData<Object> data = new JSONData<>();
+        data.setSuccess(true);
+        data.setStatus(status);
+        data.setData(project);
+
+        return ResponseEntity.status(status).body(data);
+    }
 
     /**
      * 프로젝트 삭제

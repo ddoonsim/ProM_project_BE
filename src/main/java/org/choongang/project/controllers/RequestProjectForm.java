@@ -8,6 +8,7 @@ import java.util.List;
 
 @Builder
 public record RequestProjectForm(
+        Long seq,
         List<Member> member,
         @NotBlank
         String pName,

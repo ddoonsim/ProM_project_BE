@@ -43,13 +43,28 @@ public class SaveProjectService {
     }
 
     /**
+     * 프로젝트 제목 / 설명 업데이트
+     */
+    public void updateProjectInfo(RequestProjectForm form, Errors errors) {
+        validator.validate(form, errors);
+        if (errors.hasErrors()) {
+            return;  // 유효성 검사 통과 X ==> 메서드 즉시 종료
+        }
+
+        List<Member> members = form.member();
+
+        save(form, members);
+    }
+
+    /**
      * DB에 저장하는 메서드
      */
     public void save(RequestProjectForm form, List<Member> members) {
         // DB에 저장
         Project project = Project.builder()
+                .seq(form.seq())
                 .member(members)
-                .pName(form.pName())
+                .pName(form.pname())
                 .description(form.description() == null ? "" : form.description())
                 .build();
 

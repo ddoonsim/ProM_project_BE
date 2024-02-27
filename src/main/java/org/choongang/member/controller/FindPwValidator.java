@@ -32,7 +32,7 @@ public class FindPwValidator implements Validator {
         String name = form.name();
 
         if (StringUtils.hasText(email) && StringUtils.hasText(name) && !memberRepository.existsByEmailAndName(email, name).orElse(false)) {
-            errors.reject("NotFound.member");
+            errors.rejectValue("name", "NotFound");
 
         }
     }

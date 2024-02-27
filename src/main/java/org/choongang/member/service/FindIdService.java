@@ -22,8 +22,6 @@ public class FindIdService {
             return null;
         }
 
-        // 이메일 정보 가져오기 (여기서 하는게 맞나??)
-        // (form.email());
         BooleanBuilder builder = new BooleanBuilder();
         QMember member = QMember.member;
         builder.and(member.name.eq(form.name())).and(member.mobile.eq(form.mobile().replaceAll("\\D", "")));

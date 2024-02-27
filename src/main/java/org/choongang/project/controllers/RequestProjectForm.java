@@ -11,6 +11,6 @@ public record RequestProjectForm(
         Long seq,
         List<Member> member,
         @NotBlank
-        String pName,
+        String pname,
         String description
 ) {}

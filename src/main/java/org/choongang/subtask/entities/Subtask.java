@@ -30,15 +30,17 @@ public class Subtask extends BaseMember {
     @JoinTable(name = "member_subtask")
     private List<Member> member = new ArrayList<>();    // 참여자
 
-    @Column(nullable = false)
-    private String title;
+    @Column(length = 80, nullable = false)
+    private String tName;
 
-    @Column(nullable = false)
-    private String content;
+    @Lob
+    private String description;
 
-    private BType bType = BType.TODOLIST;
+    private String bType = BType.TODOLIST.name();
 
     private Status status = Status.REQUEST ;
 
     private boolean isNotice = false;
+
+
 }

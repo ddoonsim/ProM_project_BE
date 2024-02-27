@@ -1,14 +1,17 @@
 package org.choongang.subtask.controllers;
 
 import jakarta.validation.constraints.NotBlank;
+import lombok.Builder;
 import org.choongang.member.entities.Member;
 
 import java.util.List;
 
+@Builder
 public record RequestSubtaskForm(
-        List<Member> member,
+        List<Long> member,
+        Long pSeq,
         @NotBlank
-        String title,
-        String content
+        String tName,
+        String description
 ) {
 }

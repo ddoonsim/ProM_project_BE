@@ -88,6 +88,7 @@ public class Utils {
         return getMessage(code, null);
     }
 
+    /* https://github.com/yonggyo1125/BOARD_BE/commit/c9a8ebd61021e6914dfe6b4fc61749814a3ac982 */
     public static Map<String, List<String>> getMessages(Errors errors) {
         try {
             Map<String, List<String>> data = new HashMap<>();

@@ -12,6 +12,9 @@ import org.choongang.member.entities.Member;
 import org.choongang.project.entities.Project;
 import org.hibernate.annotations.Fetch;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Data @Builder
 @NoArgsConstructor @AllArgsConstructor
@@ -20,12 +23,12 @@ public class Subtask extends BaseMember {
     private Long seq;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="pName")
+    @JoinColumn(name="pSeq")
     private Project project;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="manager")
-    private Member member;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "member_subtask")
+    private List<Member> member = new ArrayList<>();    // 참여자
 
     @Column(nullable = false)
     private String title;

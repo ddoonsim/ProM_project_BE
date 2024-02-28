@@ -28,7 +28,6 @@ public class SubtaskSaveService {
 
     public void newTask(RequestSubtaskForm form, Errors errors) {
         validator.validate(form, errors);
-        System.out.println("form============="+form);
         if(errors.hasErrors()) {
             return;
         }

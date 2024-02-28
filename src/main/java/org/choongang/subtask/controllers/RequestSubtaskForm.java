@@ -9,7 +9,6 @@ import java.util.List;
 @Builder
 public record RequestSubtaskForm(
         List<Long> member,
-        @NotBlank
         String gid,
         Long pSeq,
         String status,

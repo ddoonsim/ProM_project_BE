@@ -41,4 +41,9 @@ public class NoticeInfoService {
 
         return lists;
     }
+
+    public Subtask getOne(Long seq) {
+        Subtask subtask = repository.findById(seq).orElse(null);
+        return subtask;
+    }
 }

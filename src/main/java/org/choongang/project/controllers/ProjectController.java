@@ -108,12 +108,6 @@ public class ProjectController {
     }
 
     /**
-     * 프로젝트 설정 수정
-     */
-    @GetMapping("/edit")
-    public void editProject() {}
-
-    /**
      * 프로젝트에 초대된 회원을 프로젝트 참여자 리스트에 추가
      */
     @GetMapping("/addTeamMember")

@@ -10,6 +10,7 @@ import org.choongang.commons.constants.Status;
 import org.choongang.commons.entities.BaseMember;
 import org.choongang.member.entities.Member;
 import org.choongang.project.entities.Project;
+import org.choongang.todolist.entities.Todolist;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,5 +45,7 @@ public class Subtask extends BaseMember {
 
     private boolean isNotice = false;
 
+    @OneToMany(mappedBy = "subtask", fetch=FetchType.LAZY)
+    private List<Todolist> todos = new ArrayList<>();
 
 }

@@ -41,7 +41,11 @@ public class Subtask extends BaseMember {
 
     private String bType = BType.TODOLIST.name();
 
-    private Status status = Status.REQUEST ;
+    private String status = Status.REQUEST.name() ;
+
+    private String sDate;
+
+    private String eDate;
 
     private boolean isNotice = false;
 

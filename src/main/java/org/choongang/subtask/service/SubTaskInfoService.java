@@ -20,7 +20,7 @@ import static org.springframework.data.domain.Sort.Order.asc;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class SubTaskInfoService {
+public class SubtaskInfoService {
     private final SubtaskRepository subtaskRepository;
     private final ProjectInfoService projectInfoService;
     private final EntityManager em;

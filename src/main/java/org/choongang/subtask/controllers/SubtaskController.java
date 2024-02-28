@@ -7,7 +7,8 @@ import org.choongang.commons.Utils;
 import org.choongang.commons.exceptions.BadRequestException;
 import org.choongang.commons.rests.JSONData;
 import org.choongang.subtask.entities.Subtask;
-import org.choongang.subtask.service.SubTaskInfoService;
+import org.choongang.subtask.service.SubtaskInfoService;
+import org.choongang.subtask.service.SubtaskInfoService;
 import org.choongang.subtask.service.SubtaskSaveService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +24,7 @@ import java.util.List;
 public class SubtaskController {
 
     private final SubtaskSaveService saveService;
-    private final SubTaskInfoService infoService;
+    private final SubtaskInfoService infoService;
 
     @PostMapping("/new")
     public ResponseEntity<JSONData<Object>> newTask(@RequestBody @Valid RequestSubtaskForm form, Errors errors) {

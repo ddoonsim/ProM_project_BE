@@ -24,7 +24,7 @@ public class Subtask extends BaseMember {
     @Column(length=65, nullable = false)
     private String gid;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="pSeq")
     private Project project;
 

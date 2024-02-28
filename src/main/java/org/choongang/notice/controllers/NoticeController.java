@@ -50,4 +50,24 @@ public class NoticeController {
 
         return ResponseEntity.status(status).body(data);
     }
+
+    @PostMapping("/update")
+    public ResponseEntity<JSONData<Object>> updateNotice(@RequestBody RequestNoticeForm form) {
+        saveNoticeService.update(form);
+
+        HttpStatus status = HttpStatus.OK;
+        JSONData<Object> data = new JSONData<>();
+        data.setSuccess(true);
+        data.setStatus(status);
+
+        return ResponseEntity.status(status).body(data);
+    }
+
+    @GetMapping("/info")
+    public JSONData<Subtask> getInfo(@RequestParam("seq") Long seq) {
+        Subtask subtask = noticeInfoService.getOne(seq);
+
+        JSONData<Subtask> item = new JSONData<>(subtask);
+        return item;
+    }
 }

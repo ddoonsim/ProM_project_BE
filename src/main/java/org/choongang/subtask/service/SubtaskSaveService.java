@@ -28,10 +28,10 @@ public class SubtaskSaveService {
 
     public void newTask(RequestSubtaskForm form, Errors errors) {
         validator.validate(form, errors);
+        System.out.println("form============="+form);
         if(errors.hasErrors()) {
             return;
         }
-        System.out.println(form);
         List<Long> memberSeq = form.member();
         List<Member> members = new ArrayList<>();
 
@@ -50,6 +50,9 @@ public class SubtaskSaveService {
                 .gid(gid)
                 .member(members)
                 .tName(form.tName())
+                .status(form.status().toString())
+                .sDate(form.sDate())
+                .eDate(form.eDate())
                 .description(form.description() == null ? "" : form.description())
                 .build();
         subtaskRepository.saveAndFlush(subtask);

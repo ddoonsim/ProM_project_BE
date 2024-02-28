@@ -12,8 +12,12 @@ public record RequestSubtaskForm(
         @NotBlank
         String gid,
         Long pSeq,
+        String status,
         @NotBlank
         String tName,
-        String description
+        String description,
+        String sDate,
+        String eDate
+
 ) {
 }

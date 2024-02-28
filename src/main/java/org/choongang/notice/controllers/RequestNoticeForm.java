@@ -5,6 +5,7 @@ import lombok.Builder;
 
 @Builder
 public record RequestNoticeForm(
+        String gid,
         Long seq,  // 공지글 id
         Long pSeq,  // 프로젝트 seq
         @NotBlank

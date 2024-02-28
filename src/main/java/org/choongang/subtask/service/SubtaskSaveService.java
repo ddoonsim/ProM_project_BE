@@ -10,10 +10,12 @@ import org.choongang.subtask.controllers.SubtaskValidator;
 import org.choongang.subtask.entities.Subtask;
 import org.choongang.subtask.repositories.SubtaskRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -38,9 +40,14 @@ public class SubtaskSaveService {
     }
 
     public void save(RequestSubtaskForm form, List<Member> members){
+
+        String gid = form.gid();
+        gid = StringUtils.hasText(gid) ? gid : UUID.randomUUID().toString();
+
         Subtask subtask = Subtask.builder()
                 .project(projectRepository.findById(form.pSeq()).orElseThrow())
                 .bType(BType.TODOLIST.name())
+                .gid(gid)
                 .member(members)
                 .tName(form.tName())
                 .description(form.description() == null ? "" : form.description())

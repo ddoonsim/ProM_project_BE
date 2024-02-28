@@ -10,7 +10,7 @@ import org.choongang.commons.constants.Status;
 import org.choongang.commons.entities.BaseMember;
 import org.choongang.member.entities.Member;
 import org.choongang.project.entities.Project;
-import org.hibernate.annotations.Fetch;
+import org.choongang.todolist.entities.Todolist;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +21,9 @@ import java.util.List;
 public class Subtask extends BaseMember {
     @Id @GeneratedValue
     private Long seq;
+
+    @Column(length=65, nullable = false)
+    private String gid;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="pSeq")
@@ -42,5 +45,7 @@ public class Subtask extends BaseMember {
 
     private boolean isNotice = false;
 
+    @OneToMany(mappedBy = "subtask", fetch=FetchType.LAZY)
+    private List<Todolist> todos = new ArrayList<>();
 
 }

@@ -2,6 +2,7 @@ package org.choongang.notice.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.choongang.commons.rests.JSONData;
+import org.choongang.notice.service.DeleteNoticeService;
 import org.choongang.notice.service.NoticeInfoService;
 import org.choongang.notice.service.SaveNoticeService;
 import org.choongang.subtask.entities.Subtask;
@@ -18,6 +19,7 @@ public class NoticeController {
 
     private final SaveNoticeService saveNoticeService;
     private final NoticeInfoService noticeInfoService;
+    private final DeleteNoticeService deleteNoticeService;
 
     /**
      * 새 공지글 등록
@@ -69,5 +71,17 @@ public class NoticeController {
 
         JSONData<Subtask> item = new JSONData<>(subtask);
         return item;
+    }
+
+    @PostMapping("/delete")
+    public ResponseEntity<JSONData<Object>> delete(@RequestBody RequestNoticeForm form) {
+        deleteNoticeService.deleteNotice(form);
+
+        HttpStatus status = HttpStatus.OK;
+        JSONData<Object> data = new JSONData<>();
+        data.setSuccess(true);
+        data.setStatus(status);
+
+        return ResponseEntity.status(status).body(data);
     }
 }

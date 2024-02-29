@@ -8,14 +8,12 @@ import org.choongang.commons.exceptions.BadRequestException;
 import org.choongang.commons.rests.JSONData;
 import org.choongang.subtask.entities.Subtask;
 import org.choongang.subtask.service.SubtaskInfoService;
-import org.choongang.subtask.service.SubtaskInfoService;
 import org.choongang.subtask.service.SubtaskSaveService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -61,6 +59,13 @@ public class SubtaskController {
     @GetMapping("/{seq}")
     public JSONData<Object> getSubTaskList(@PathVariable("seq") Long seq) {
         List<Subtask> items = infoService.getList(seq);
+
+        return new JSONData<>(items);
+    }
+
+    @GetMapping("/mines")
+    public JSONData<Object> getMines() {
+        List<Subtask> items = infoService.getMyTasks();
 
         return new JSONData<>(items);
     }

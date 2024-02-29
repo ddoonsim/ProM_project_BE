@@ -2,6 +2,7 @@ package org.choongang.subtask.service;
 
 import lombok.RequiredArgsConstructor;
 import org.choongang.commons.constants.BType;
+import org.choongang.commons.constants.Status;
 import org.choongang.member.entities.Member;
 import org.choongang.member.repositories.MemberRepository;
 import org.choongang.project.repositories.ProjectRepository;
@@ -42,6 +43,7 @@ public class SubtaskSaveService {
 
         String gid = form.gid();
         gid = StringUtils.hasText(gid) ? gid : UUID.randomUUID().toString();
+        String status = StringUtils.hasText(form.status()) ? form.status() : Status.REQUEST.name();
 
         Subtask subtask = Subtask.builder()
                 .project(projectRepository.findById(form.pSeq()).orElseThrow())
@@ -49,11 +51,12 @@ public class SubtaskSaveService {
                 .gid(gid)
                 .member(members)
                 .tName(form.tName())
-                .status(form.status().toString())
+                .status(status)
                 .sDate(form.sDate())
                 .eDate(form.eDate())
                 .description(form.description() == null ? "" : form.description())
                 .build();
+
         subtaskRepository.saveAndFlush(subtask);
     }
 }

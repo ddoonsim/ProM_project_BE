@@ -56,6 +56,7 @@ public class SubtaskInfoService {
         QSubtask subtask = QSubtask.subtask;
         Subtask data = new JPAQueryFactory(em)
                 .selectFrom(subtask)
+                .where(subtask.seq.eq(seq))
                 .leftJoin(subtask.todos)
                 .fetchJoin()
                 .fetchFirst();

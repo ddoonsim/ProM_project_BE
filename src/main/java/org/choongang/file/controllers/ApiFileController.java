@@ -2,10 +2,14 @@ package org.choongang.file.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.choongang.commons.ExceptionRestProcessor;
+import org.choongang.commons.exceptions.AlertBackException;
+import org.choongang.commons.exceptions.CommonException;
 import org.choongang.commons.rests.JSONData;
 import org.choongang.file.entities.FileInfo;
 import org.choongang.file.service.FileDeleteService;
+import org.choongang.file.service.FileDownloadService;
 import org.choongang.file.service.FileUploadService;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -17,6 +21,7 @@ import java.util.List;
 public class ApiFileController implements ExceptionRestProcessor { // 통일된 방식으로 에러 응답
 
     private final FileUploadService uploadService;
+    private final FileDownloadService downloadService;
     private final FileDeleteService deleteService;
 
     @PostMapping
@@ -31,6 +36,19 @@ public class ApiFileController implements ExceptionRestProcessor { // 통일된 
 
 
         return new JSONData<>(uploadedFiles);
+    }
+
+    /**
+     * 파일 다운로드 컨트롤러
+     */
+    @ResponseBody
+    @GetMapping("/download/{seq}")
+    public void download(@PathVariable("seq") Long seq) {
+        try {
+            downloadService.download(seq);
+        } catch (CommonException e) {
+            throw new AlertBackException(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
     }
 
     @DeleteMapping("/{seq}")

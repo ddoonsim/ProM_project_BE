@@ -12,6 +12,7 @@ import org.choongang.member.entities.Member;
 import org.choongang.project.entities.Project;
 import org.choongang.todolist.entities.Todolist;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,11 +42,13 @@ public class Subtask extends BaseMember {
 
     private String bType = BType.TODOLIST.name();
 
-    private String status = Status.REQUEST.name() ;
+    @Enumerated(EnumType.STRING)
+    @Column(length=10, nullable = false)
+    private Status status = Status.REQUEST;
 
-    private String sDate;
+    private LocalDate sDate;
 
-    private String eDate;
+    private LocalDate eDate;
 
     private boolean isNotice = false;
 

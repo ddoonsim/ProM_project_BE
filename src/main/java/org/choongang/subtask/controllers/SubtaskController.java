@@ -37,6 +37,16 @@ public class SubtaskController {
         return ResponseEntity.status(status).body(data);
     }
 
+    @PostMapping("/save")
+    public ResponseEntity<JSONData<Object>> saveTask(@RequestBody @Valid RequestSubtaskForm form, Errors errors) {
+        Subtask subTask = saveService.saveTask(form, errors);
+        errorProcess(errors);
+
+        JSONData<Object> data = new JSONData<>(subTask);
+        data.setStatus(HttpStatus.CREATED);
+
+        return ResponseEntity.status(data.getStatus()).body(data);
+    }
     /**
      * 업무 목록 상세
      *

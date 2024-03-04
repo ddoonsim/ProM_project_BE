@@ -1,5 +1,5 @@
 package org.choongang.commons.constants;
 
 public enum Status {
-    REQUEST, PROGRESS, FEEDBACK, COMPLETE, HOLD
+    REQUEST, PROGRESS, SUCCESS, HOLD
 }

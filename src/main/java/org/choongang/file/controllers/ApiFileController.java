@@ -8,6 +8,7 @@ import org.choongang.commons.rests.JSONData;
 import org.choongang.file.entities.FileInfo;
 import org.choongang.file.service.FileDeleteService;
 import org.choongang.file.service.FileDownloadService;
+import org.choongang.file.service.FileInfoService;
 import org.choongang.file.service.FileUploadService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +24,7 @@ public class ApiFileController implements ExceptionRestProcessor { // 통일된 
     private final FileUploadService uploadService;
     private final FileDownloadService downloadService;
     private final FileDeleteService deleteService;
+    private final FileInfoService infoService;
 
     @PostMapping
     public JSONData<List<FileInfo>> upload(@RequestParam("file") MultipartFile[] files,
@@ -51,10 +53,20 @@ public class ApiFileController implements ExceptionRestProcessor { // 통일된 
         }
     }
 
-    @DeleteMapping("/{seq}")
+    @DeleteMapping("/delete/{seq}")
     public JSONData<Long> delete(@PathVariable("seq") Long seq) {
         deleteService.delete(seq);
 
         return new JSONData<>(seq);
+    }
+
+    /**
+     * 특정 위치에서 업로드한 파일 목록 반환
+     */
+    @GetMapping("/getList")
+    public JSONData<Object> getList(@RequestParam(name = "gid")String gid, @RequestParam(name = "location")String location) {
+        List<FileInfo> items = infoService.getListDone(gid, location);
+
+        return new JSONData<>(items);
     }
 }

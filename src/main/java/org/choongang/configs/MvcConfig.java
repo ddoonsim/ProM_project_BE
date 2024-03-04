@@ -1,5 +1,7 @@
 package org.choongang.configs;
 
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.MessageSource;
@@ -15,6 +17,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @EnableJpaAuditing
 @EnableConfigurationProperties(FileProperties.class)  // 분리된 파일 업로드를 위한 설정 클래스를 포함시킴
 public class MvcConfig implements WebMvcConfigurer {
+
+    @Autowired
+    private EntityManager em;
 
     @Autowired
     private FileProperties fileProperties ;
@@ -43,5 +48,10 @@ public class MvcConfig implements WebMvcConfigurer {
     @Bean
     public HiddenHttpMethodFilter httpMethodFilter() {
         return new HiddenHttpMethodFilter() ;
+    }
+
+    @Bean
+    public JPAQueryFactory jpaQueryFactory() {
+        return new JPAQueryFactory(em);
     }
 }

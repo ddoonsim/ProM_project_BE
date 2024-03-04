@@ -1,10 +1,8 @@
 package org.choongang.subtask.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.choongang.commons.constants.BType;
 import org.choongang.commons.constants.Status;
 import org.choongang.commons.entities.BaseMember;
@@ -30,9 +28,17 @@ public class Subtask extends BaseMember {
     @JoinColumn(name="pSeq")
     private Project project;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "member_subtask")
-    private List<Member> member = new ArrayList<>();    // 참여자
+    @JsonIgnore
+    @ToString.Exclude
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="memberSeq")
+    private Member member;
+
+    //@ManyToMany(fetch = FetchType.EAGER)
+    //@JoinTable(name = "member_subtask")
+    //private List<Member> member = new ArrayList<>();    // 참여자
+    @Column(length=100)
+    private String memberSeqs;
 
     @Column(length = 80, nullable = false)
     private String tName;
@@ -54,5 +60,8 @@ public class Subtask extends BaseMember {
 
     @OneToMany(mappedBy = "subtask", fetch=FetchType.LAZY)
     private List<Todolist> todos = new ArrayList<>();
+
+    @Transient
+    private List<Member> members;
 
 }

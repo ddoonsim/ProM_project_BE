@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.choongang.commons.constants.BType;
 import org.choongang.commons.constants.Status;
 import org.choongang.file.service.FileUploadService;
+import org.choongang.member.MemberUtil;
 import org.choongang.member.entities.Member;
 import org.choongang.member.entities.QMember;
 import org.choongang.member.repositories.MemberRepository;
@@ -24,6 +25,7 @@ import org.springframework.validation.Errors;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -31,11 +33,12 @@ import java.util.UUID;
 public class SubtaskSaveService {
 
     private final SubtaskValidator validator;
-    private final MemberRepository memberRepository;
     private final SubtaskRepository subtaskRepository;
     private final ProjectRepository projectRepository;
     private final TodolistRepository todolistRepository;
     private final FileUploadService fileUploadService;
+    private final MemberUtil memberUtil;
+    private final MemberRepository memberRepository;
 
     /**
      * 업무 등록, 수정
@@ -63,7 +66,7 @@ public class SubtaskSaveService {
             subtask = subtaskRepository.findById(seq).orElseThrow(SubtaskNotFoundException::new);
 
         };
-
+        /*
         List<Long> memberSeq = form.members();
         List<Member> members = null;
         if (memberSeq != null && !memberSeq.isEmpty()) {
@@ -71,7 +74,13 @@ public class SubtaskSaveService {
         }
 
         subtask.setMember(members);
-
+        */
+        List<Long> memberSeq = form.members();
+        if (memberSeq != null && !memberSeq.isEmpty()) {
+            String memberSeqs = memberSeq.stream().map(String::valueOf).collect(Collectors.joining(","));
+            subtask.setMemberSeqs(memberSeqs);
+        }
+        System.out.println(form.memberSeqs());
         Status status = StringUtils.hasText(form.status()) ? Status.valueOf(form.status()) : Status.REQUEST;
 
         subtask.setTName(form.tname());
@@ -79,6 +88,8 @@ public class SubtaskSaveService {
         subtask.setStatus(status);
         subtask.setSDate(form.sdate());
         subtask.setEDate(form.edate());
+        subtask.setMember(memberUtil.getMember());
+
 
         subtaskRepository.saveAndFlush(subtask);
 
@@ -127,7 +138,7 @@ public class SubtaskSaveService {
     }
 
     public void save(RequestSubtaskForm form, List<Member> members){
-
+        /*
         String gid = form.gid();
         gid = StringUtils.hasText(gid) ? gid : UUID.randomUUID().toString();
         Status status = StringUtils.hasText(form.status()) ? Status.valueOf(form.status()) : Status.REQUEST;
@@ -136,7 +147,7 @@ public class SubtaskSaveService {
                 .project(projectRepository.findById(form.pSeq()).orElseThrow())
                 .bType(BType.TODOLIST.name())
                 .gid(gid)
-                .member(members)
+                .memberSeqs()
                 .tName(form.tname())
                 .status(status)
                 .sDate(form.sdate())
@@ -145,5 +156,7 @@ public class SubtaskSaveService {
                 .build();
 
         subtaskRepository.saveAndFlush(subtask);
+
+         */
     }
 }

@@ -7,6 +7,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.choongang.member.MemberUtil;
 import org.choongang.member.entities.Member;
+import org.choongang.member.entities.QMember;
+import org.choongang.member.repositories.MemberRepository;
 import org.choongang.project.entities.Project;
 import org.choongang.project.service.ProjectInfoService;
 import org.choongang.subtask.entities.QSubtask;
@@ -14,8 +16,11 @@ import org.choongang.subtask.entities.Subtask;
 import org.choongang.subtask.repositories.SubtaskRepository;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.springframework.data.domain.Sort.Order.asc;
 
@@ -27,6 +32,7 @@ public class SubtaskInfoService {
     private final ProjectInfoService projectInfoService;
     private final EntityManager em;
     private final MemberUtil memberUtil;
+    private final MemberRepository memberRepository;
 
     public List<Subtask> getList(Long seq) {
         Project project = projectInfoService.viewOne(seq);
@@ -36,6 +42,8 @@ public class SubtaskInfoService {
         andBuilder.and(subtask.project.eq(project));
 
         List<Subtask> items = (List<Subtask>)subtaskRepository.findAll(andBuilder, Sort.by(asc("createdAt")));
+
+
 
         return items;
     }
@@ -61,8 +69,19 @@ public class SubtaskInfoService {
                 .fetchJoin()
                 .fetchFirst();
 
+        addInfo(data);
+
         return data;
     }
 
+    private void addInfo(Subtask data) {
+        String memberSeqs = data.getMemberSeqs();
+        if (StringUtils.hasText((memberSeqs))) {
+            QMember member = QMember.member;
+            List<Long> seqs = Arrays.stream(memberSeqs.split(",")).filter(s -> !s.isBlank() && !s.equals("null")).map(Long::valueOf).toList();
+            List<Member> members = (List<Member>)memberRepository.findAll(member.seq.in(seqs));
+            data.setMembers(members);
+        }
+    }
 
 }

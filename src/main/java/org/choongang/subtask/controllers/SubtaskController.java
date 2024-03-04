@@ -55,6 +55,7 @@ public class SubtaskController {
      */
     @GetMapping("/sub/{seq}")
     public JSONData<Object> getSubTask(@PathVariable("seq") Long seq) {
+
         Subtask item = infoService.get(seq);
 
         return new JSONData<>(item);

@@ -4,10 +4,8 @@ import jakarta.validation.constraints.NotBlank;
 
 public record RequestTodo(
         Long seq, // Todolist 등록번호
-        @NotBlank
         Long sSeq, // Subtask 등록번호,
         @NotBlank
         String content,
-        @NotBlank
-        String status
+        boolean done
 ) {}

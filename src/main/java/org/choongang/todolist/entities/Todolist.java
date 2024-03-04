@@ -1,11 +1,8 @@
 package org.choongang.todolist.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.choongang.commons.constants.Status;
+import lombok.*;
 import org.choongang.commons.entities.BaseMember;
 import org.choongang.member.entities.Member;
 import org.choongang.subtask.entities.Subtask;
@@ -20,14 +17,18 @@ public class Todolist extends BaseMember {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "subtask")
+    @ToString.Exclude
+    @JsonIgnore
     private Subtask subtask;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="manager")
+    @ToString.Exclude
+    @JsonIgnore
     private Member member;
 
     @Lob
     private String content;
 
-    private Status status = Status.REQUEST;
+    private boolean done;
 }

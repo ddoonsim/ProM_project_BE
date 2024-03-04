@@ -51,6 +51,9 @@ logging:
           descriptor:
             sql: trace
 
+  jackson:
+    serialization:
+      fail-on-empty-beans: false
 # 파일 업로드 경로 설정
 file:
   upload:

@@ -69,6 +69,10 @@ spring:
           starttls:
             enable: true # StartTLS 활성화 여부 - 기본값 false
 
+  jackson:
+    serialization:
+      fail-on-empty-beans: false
+
 # 로거 설정
 logging:
   level:

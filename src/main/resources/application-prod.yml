@@ -38,6 +38,10 @@ spring:
     cache: true
     prefix: classpath:/templates/
 
+  jackson:
+    serialization:
+      fail-on-empty-beans: false
+
 # 로거 설정
 logging:
   level:

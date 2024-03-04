@@ -12,6 +12,7 @@ import java.util.List;
 public record RequestSubtaskForm(
         Long seq,
         List<Long> members,
+        String memberSeqs,
         String gid,
         Long pSeq,
         String status,

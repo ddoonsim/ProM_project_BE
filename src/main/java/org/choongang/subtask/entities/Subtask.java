@@ -49,7 +49,7 @@ public class Subtask extends BaseMember {
     private String bType = BType.TODOLIST.name();
 
     @Enumerated(EnumType.STRING)
-    @Column(length=10, nullable = false)
+    @Column(length=10)
     private Status status = Status.REQUEST;
 
     private LocalDate sDate;

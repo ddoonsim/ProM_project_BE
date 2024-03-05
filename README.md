@@ -21,6 +21,12 @@
 
 개발 프로젝트 기획 당시 많이 활용하는 팀 프로젝트를 관리하는 플랫폼을 구현하고자 하였습니다.
 
+### 🌐배포 서버
+http://13.124.132.111:3000/
+
+### 🗓️개발 수행 절차
+![프로젝트 수행 절차](https://github.com/ddoonsim/ProM_project_FE/assets/143992194/c2a6c153-279b-4e7c-862f-699606326bcc)
+
 ### 🛠️Skills
 ![그림1](https://github.com/ddoonsim/ProM_project_FE/assets/143992194/3915e612-d4cc-49ec-86b3-3423de39cbbc)
 ---
@@ -94,6 +100,11 @@
     <li>색상을 다르게 하기 위해 업무 진행상태(status)를 events 배열 객체의 속성값으로 추가함</li>
   </ul>
 </details>
+<details>
+  <summary>ERD 구조</summary>
+  
+  ![ERD](https://github.com/ddoonsim/ProM_project_FE/assets/143992194/dd8ead99-f97e-4219-856c-c7bde2d1d306)
+</details>
 
 ## 화면 구성
 <details>
@@ -109,6 +120,10 @@
   |:-:|:-:|
   |![로그인](https://github.com/ddoonsim/ProM_project_BE/assets/143992194/bf4680a7-4662-4bf3-a43f-72cbea512230)|![아이디_비밀번호_찾기](https://github.com/ddoonsim/ProM_project_BE/assets/143992194/d131fe25-32bb-4809-b443-d1359716276d)|
 
+  |회원정보 수정|대시보드|
+  |:-:|:-:|
+  |![회원정보수정](https://github.com/ddoonsim/ProM_project_FE/assets/143992194/36b4319e-d629-46a4-b880-9c4e37cb8f84)|![대시보드](https://github.com/ddoonsim/ProM_project_FE/assets/143992194/25182eb3-0bb4-4780-af63-bc73d59ddd3a)|
+
   |프로젝트 생성|프로젝트 페이지|
   |:-:|:-:|
   |![새프로젝트생성](https://github.com/ddoonsim/ProM_project_BE/assets/143992194/5f273433-6f04-447f-a9e6-77fe9935ee19)|![프로젝트페이지](https://github.com/ddoonsim/ProM_project_BE/assets/143992194/ebece9e0-c397-46a7-bdbd-784dd8ca89f4)|
@@ -121,9 +136,9 @@
   |:-:|:-:|
   |![채팅창](https://github.com/ddoonsim/ProM_project_BE/assets/143992194/ca68995c-54d6-4943-b486-b43d825b86cd)|![공지사항등록](https://github.com/ddoonsim/ProM_project_BE/assets/143992194/1e19a648-8abd-4bf4-b0de-854a2f21e83b)|
 
-  |업무 및 할 일 추가|대시보드|
+  |업무 및 할 일 추가|업무 칸반보드|
   |:-:|:-:|
-  |||
+  |![addTask](https://github.com/ddoonsim/ProM_project_FE/assets/143992194/4c539df2-fc29-409a-a236-f0ac2dba8609)|![KanbanBoard](https://github.com/ddoonsim/ProM_project_FE/assets/143992194/56bea95e-1378-4c4a-a8b9-930348cf7cd3)|
 </details>
 
 ## 역할 및 담당 업무

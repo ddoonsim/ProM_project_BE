@@ -57,5 +57,5 @@ logging:
 # 파일 업로드 경로 설정
 file:
   upload:
-    path: /home/project/uploads/    # (임시)변경 가능
+    path: /home/ubuntu/uploads/    # (임시)변경 가능
     url: /uploads/

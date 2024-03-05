@@ -42,7 +42,7 @@ public class SubtaskInfoService {
         andBuilder.and(subtask.project.eq(project));
 
         List<Subtask> items = (List<Subtask>)subtaskRepository.findAll(andBuilder, Sort.by(asc("createdAt")));
-
+        items.forEach(this::addInfo);
 
 
         return items;
@@ -56,6 +56,7 @@ public class SubtaskInfoService {
         Member member = memberUtil.getMember();
 
         List<Subtask> tasks = subtaskRepository.findAllByMember(member).orElse(null);
+        tasks.forEach(this::addInfo);
 
         return tasks ;
     }
